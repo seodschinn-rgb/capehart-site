@@ -1609,8 +1609,9 @@ a.ch-button--ghost:hover {
   }
 
   .ch-header-row .wp-block-navigation__responsive-container-close {
-    top: 0;
-    right: 0;
+    position: fixed;
+    top: max(1rem, env(safe-area-inset-top));
+    right: max(20px, env(safe-area-inset-right));
     width: 46px;
     height: 46px;
     display: grid;
@@ -1779,7 +1780,7 @@ a.ch-button--ghost:hover {
   }
 
   .ch-header-actions {
-    display: none;
+    display: none !important;
   }
 
   .ch-mobile-cta {
