@@ -22,18 +22,17 @@ The current site contains legacy Spectra blocks. Keep Spectra and Spectra Pro ac
 
 ## Installation and deployment
 
-The canonical theme source lives in Git. Pushes to the `staging` branch are
-automatically synchronized to the exact Capehart theme directory on Rocket.net;
-production remains a manually confirmed workflow. See `DEPLOYMENT.md` for the
-one-time GitHub and Rocket.net setup.
+The canonical theme source lives in Git. Pushes to `main` are automatically
+synchronized to the exact Capehart theme directory on Rocket.net. See
+`DEPLOYMENT.md` for the one-time GitHub and Rocket.net setup and rollback flow.
 
-1. Back up files and database, then create a staging copy of `capeharthc.com`.
-2. Configure the dedicated Rocket.net SSH deployment key and GitHub secrets.
-3. Push the `staging` branch and let GitHub Actions install the theme files.
-4. In staging, activate **Capehart Custom** once under **Appearance → Themes**.
+1. Create or verify a current Rocket.net backup of files and database.
+2. Configure the dedicated Rocket.net production SSH key and GitHub secrets.
+3. Push `main` and let GitHub Actions install the theme files.
+4. In WordPress, activate **Capehart Custom** once under **Appearance → Themes**.
 5. Open **Appearance → Editor** and verify the logo, navigation, header, and footer.
-6. Under **Settings → Reading**, assign the current homepage as the static homepage and the current blog page as the posts page.
-7. Follow `MIGRATION.md` and `STAGING-CHECKLIST.md` before the manually confirmed production deployment.
+6. Under **Settings → Reading**, verify the static homepage and posts-page assignments.
+7. Follow `MIGRATION.md` and keep Astra installed during the rollback window.
 
 ## Content editing
 

@@ -1,25 +1,17 @@
-name: Deploy Capehart WordPress theme
+name: Deploy Capehart theme to Rocket.net
 
 on:
   push:
     branches:
-      - staging
+      - main
   workflow_dispatch:
     inputs:
-      target:
-        description: Deployment target
-        required: true
-        type: choice
-        default: staging
-        options:
-          - staging
-          - production
       commit_sha:
-        description: Tested 40-character staging commit SHA (required for production)
+        description: Optional 40-character main-branch commit SHA for rollback/redeploy
         required: false
         type: string
-      confirm_production:
-        description: Type DEPLOY_PRODUCTION for a production deployment
+      confirm_live:
+        description: Type DEPLOY_LIVE when starting the workflow manually
         required: false
         type: string
 
@@ -27,28 +19,22 @@ permissions:
   contents: read
 
 concurrency:
-  group: capehart-theme-${{ github.event_name == 'push' && 'staging' || inputs.target }}
+  group: capehart-theme-production
   cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Deploy to ${{ github.event_name == 'push' && 'staging' || inputs.target }}
+    name: Deploy live theme files
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      DEPLOY_TARGET: ${{ github.event_name == 'push' && 'staging' || inputs.target }}
       REQUESTED_SHA: ${{ inputs.commit_sha }}
-      CONFIRM_PRODUCTION: ${{ inputs.confirm_production }}
-      STAGING_HOST: ${{ secrets.ROCKET_STAGING_HOST }}
-      STAGING_USER: ${{ secrets.ROCKET_STAGING_USER }}
-      STAGING_PRIVATE_KEY: ${{ secrets.ROCKET_STAGING_PRIVATE_KEY }}
-      STAGING_KNOWN_HOSTS: ${{ secrets.ROCKET_STAGING_KNOWN_HOSTS }}
-      STAGING_SITE_URL: ${{ secrets.ROCKET_STAGING_SITE_URL }}
-      PRODUCTION_HOST: ${{ secrets.ROCKET_PRODUCTION_HOST }}
-      PRODUCTION_USER: ${{ secrets.ROCKET_PRODUCTION_USER }}
-      PRODUCTION_PRIVATE_KEY: ${{ secrets.ROCKET_PRODUCTION_PRIVATE_KEY }}
-      PRODUCTION_KNOWN_HOSTS: ${{ secrets.ROCKET_PRODUCTION_KNOWN_HOSTS }}
-      PRODUCTION_SITE_URL: ${{ secrets.ROCKET_PRODUCTION_SITE_URL }}
+      CONFIRM_LIVE: ${{ inputs.confirm_live }}
+      ROCKET_HOST: ${{ secrets.ROCKET_HOST }}
+      ROCKET_USER: ${{ secrets.ROCKET_USER }}
+      ROCKET_PRIVATE_KEY: ${{ secrets.ROCKET_PRIVATE_KEY }}
+      ROCKET_KNOWN_HOSTS: ${{ secrets.ROCKET_KNOWN_HOSTS }}
+      ROCKET_SITE_URL: ${{ secrets.ROCKET_SITE_URL }}
 
     steps:
       - name: Check out the requested source
@@ -56,7 +42,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.commit_sha || github.sha }}
+          ref: ${{ inputs.commit_sha || github.sha }}
 
       - name: Confirm the exact deployable commit
         shell: bash
@@ -69,32 +55,27 @@ jobs:
             exit 1
           fi
 
-          if [[ "$DEPLOY_TARGET" == "production" ]]; then
-            if [[ ! "$REQUESTED_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
-              echo 'Production requires the complete 40-character staging commit SHA.' >&2
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            if [[ "$CONFIRM_LIVE" != "DEPLOY_LIVE" ]]; then
+              echo 'A manual live deployment requires the confirmation DEPLOY_LIVE.' >&2
               exit 1
             fi
-            if [[ "${REQUESTED_SHA,,}" != "$deploy_sha" ]]; then
-              echo 'The checked-out commit does not match the requested production SHA.' >&2
-              exit 1
+            if [[ -n "$REQUESTED_SHA" ]]; then
+              if [[ ! "$REQUESTED_SHA" =~ ^[0-9a-fA-F]{40}$ || "${REQUESTED_SHA,,}" != "$deploy_sha" ]]; then
+                echo 'The requested SHA is invalid or differs from the checked-out commit.' >&2
+                exit 1
+              fi
             fi
-            if [[ "$CONFIRM_PRODUCTION" != "DEPLOY_PRODUCTION" ]]; then
-              echo 'Production deployment was not explicitly confirmed.' >&2
-              exit 1
-            fi
-
-            git show-ref --verify --quiet refs/remotes/origin/staging || {
-              echo 'The staging branch is unavailable in the checked-out repository.' >&2
-              exit 1
-            }
-            git merge-base --is-ancestor "$deploy_sha" origin/staging || {
-              echo 'Production can deploy only a commit that exists on the staging branch.' >&2
-              exit 1
-            }
-          elif [[ "$DEPLOY_TARGET" != "staging" ]]; then
-            echo "Unsupported deployment target: $DEPLOY_TARGET" >&2
-            exit 1
           fi
+
+          git show-ref --verify --quiet refs/remotes/origin/main || {
+            echo 'The main branch is unavailable in the checked-out repository.' >&2
+            exit 1
+          }
+          git merge-base --is-ancestor "$deploy_sha" origin/main || {
+            echo 'Only commits contained in the main branch may be deployed live.' >&2
+            exit 1
+          }
 
           echo "DEPLOY_SHA=$deploy_sha" >> "$GITHUB_ENV"
 
@@ -141,54 +122,33 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
+          : "${ROCKET_HOST:?Missing ROCKET_HOST secret}"
+          : "${ROCKET_USER:?Missing ROCKET_USER secret}"
+          : "${ROCKET_PRIVATE_KEY:?Missing ROCKET_PRIVATE_KEY secret}"
+          : "${ROCKET_KNOWN_HOSTS:?Missing ROCKET_KNOWN_HOSTS secret}"
 
-          if [[ "$DEPLOY_TARGET" == "production" ]]; then
-            rocket_host="$PRODUCTION_HOST"
-            rocket_user="$PRODUCTION_USER"
-            private_key="$PRODUCTION_PRIVATE_KEY"
-            known_hosts="$PRODUCTION_KNOWN_HOSTS"
-            site_url="$PRODUCTION_SITE_URL"
-          else
-            rocket_host="$STAGING_HOST"
-            rocket_user="$STAGING_USER"
-            private_key="$STAGING_PRIVATE_KEY"
-            known_hosts="$STAGING_KNOWN_HOSTS"
-            site_url="$STAGING_SITE_URL"
-          fi
-
-          : "${rocket_host:?Missing Rocket.net host secret}"
-          : "${rocket_user:?Missing Rocket.net user secret}"
-          : "${private_key:?Missing Rocket.net private-key secret}"
-          : "${known_hosts:?Missing Rocket.net known-hosts secret}"
-
-          if [[ ! "$rocket_host" =~ ^[A-Za-z0-9.-]+$ ]]; then
+          if [[ ! "$ROCKET_HOST" =~ ^[A-Za-z0-9.-]+$ ]]; then
             echo 'The Rocket.net host contains unsupported characters.' >&2
             exit 1
           fi
-          if [[ ! "$rocket_user" =~ ^[A-Za-z0-9._-]+$ ]]; then
+          if [[ ! "$ROCKET_USER" =~ ^[A-Za-z0-9._-]+$ ]]; then
             echo 'The Rocket.net SSH username contains unsupported characters.' >&2
             exit 1
           fi
-          if [[ -n "$site_url" && ! "$site_url" =~ ^https://[A-Za-z0-9.-]+/?$ ]]; then
-            echo 'The optional health-check URL must be an HTTPS site origin.' >&2
+          if [[ -n "$ROCKET_SITE_URL" && ! "$ROCKET_SITE_URL" =~ ^https://[A-Za-z0-9.-]+/?$ ]]; then
+            echo 'ROCKET_SITE_URL must be an HTTPS site origin.' >&2
             exit 1
           fi
 
-          {
-            echo "ROCKET_HOST=$rocket_host"
-            echo "ROCKET_USER=$rocket_user"
-            echo "ROCKET_SITE_URL=$site_url"
-          } >> "$GITHUB_ENV"
-
           umask 077
           mkdir -p "$HOME/.ssh"
-          printf '%s\n' "$private_key" | tr -d '\r' > "$HOME/.ssh/capehart_deploy"
-          printf '%s\n' "$known_hosts" | tr -d '\r' > "$HOME/.ssh/known_hosts"
+          printf '%s\n' "$ROCKET_PRIVATE_KEY" | tr -d '\r' > "$HOME/.ssh/capehart_deploy"
+          printf '%s\n' "$ROCKET_KNOWN_HOSTS" | tr -d '\r' > "$HOME/.ssh/known_hosts"
 
           {
             echo 'Host rocket-capehart'
-            echo "  HostName $rocket_host"
-            echo "  User $rocket_user"
+            echo "  HostName $ROCKET_HOST"
+            echo "  User $ROCKET_USER"
             echo '  Port 22'
             echo "  IdentityFile $HOME/.ssh/capehart_deploy"
             echo '  IdentitiesOnly yes'
@@ -229,7 +189,7 @@ jobs:
           set -Eeuo pipefail
           ssh rocket-capehart "bash -s -- activate '$DEPLOY_SHA'" < .github/scripts/rocket-theme-deploy.sh
 
-      - name: Check the site response
+      - name: Check the live site response
         if: ${{ env.ROCKET_SITE_URL != '' }}
         shell: bash
         run: |
