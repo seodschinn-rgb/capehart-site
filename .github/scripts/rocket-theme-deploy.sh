@@ -69,9 +69,7 @@ case "$action" in
     grep -Fq 'Theme Name: Capehart Custom' "$incoming/style.css"
 
     php -r 'json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);' "$incoming/theme.json"
-    while IFS= read -r -d '' php_file; do
-      php -l "$php_file" >/dev/null
-    done < <(find "$incoming" -type f -name '*.php' -print0)
+    find "$incoming" -type f -name '*.php' -exec php -l {} \; >/dev/null
 
     mkdir -p "$backup_root"
     if [[ -d "$target" ]]; then

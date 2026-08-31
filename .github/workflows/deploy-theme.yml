@@ -112,9 +112,7 @@ jobs:
           grep -Fq 'Theme Name: Capehart Custom' "$package_dir/style.css"
           jq -e . "$package_dir/theme.json" >/dev/null
 
-          while IFS= read -r -d '' php_file; do
-            php -l "$php_file"
-          done < <(find "$package_dir" -type f -name '*.php' -print0)
+          find "$package_dir" -type f -name '*.php' -exec php -l {} \;
 
           echo "PACKAGE_DIR=$package_dir" >> "$GITHUB_ENV"
 
