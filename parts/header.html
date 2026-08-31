@@ -20,10 +20,28 @@
 	<div class="wp-block-group alignwide ch-shell ch-header-row">
 		<!-- wp:site-logo {"width":196,"shouldSyncIcon":false} /-->
 
-		<!-- wp:navigation {"overlayMenu":"mobile","icon":"menu","className":"ch-nav","layout":{"type":"flex","setCascadingProperties":true,"justifyContent":"center","orientation":"horizontal"}} -->
-			<!-- wp:navigation-link {"label":"Services","url":"/services/","kind":"custom"} /-->
-			<!-- wp:navigation-link {"label":"Cooling","url":"/air-conditioning/","kind":"custom"} /-->
-			<!-- wp:navigation-link {"label":"Heating","url":"/heating/","kind":"custom"} /-->
+		<!-- wp:navigation {"overlayMenu":"mobile","icon":"menu","showSubmenuIcon":true,"openSubmenusOnClick":false,"className":"ch-nav","layout":{"type":"flex","setCascadingProperties":true,"justifyContent":"center","orientation":"horizontal"}} -->
+			<!-- wp:navigation-submenu {"label":"Services","url":"/services/","kind":"custom","isTopLevelItem":true} -->
+				<!-- wp:navigation-link {"label":"All Services","url":"/services/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Dryer Vent Cleaning","url":"/dryer-vent-cleaning-tulsa/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Emergency AC Repair","url":"/emergency-ac-repair/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+
+			<!-- wp:navigation-submenu {"label":"Cooling","url":"/air-conditioning/","kind":"custom","isTopLevelItem":true} -->
+				<!-- wp:navigation-link {"label":"Cooling Overview","url":"/air-conditioning/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"AC Repair","url":"/ac-repair-tulsa-ok/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"AC Maintenance","url":"/air-conditioning-maintenance/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"AC Installation","url":"/ac-installation-tulsa-ok/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"AC Replacement","url":"/air-conditioning-replacement/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+
+			<!-- wp:navigation-submenu {"label":"Heating","url":"/heating/","kind":"custom","isTopLevelItem":true} -->
+				<!-- wp:navigation-link {"label":"Heating Overview","url":"/heating/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Furnace Repair","url":"/furnace-repair/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Furnace Maintenance","url":"/furnace-maintenance/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Furnace Replacement","url":"/furnace-replacement/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+
 			<!-- wp:navigation-link {"label":"About","url":"/about-us/","kind":"custom"} /-->
 			<!-- wp:navigation-link {"label":"Guides","url":"/blog/","kind":"custom"} /-->
 			<!-- wp:navigation-link {"label":"Contact","url":"/contact/","kind":"custom"} /-->
