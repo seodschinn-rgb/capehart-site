@@ -374,6 +374,9 @@ a.ch-button--ghost:hover {
 .ch-hero__grid {
   position: relative;
   z-index: 1;
+  width: min(calc(100% - 40px), var(--ch-container));
+  max-width: none;
+  margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.78fr);
   align-items: center;
@@ -1272,20 +1275,6 @@ a.ch-button--ghost:hover {
   border: 1px solid var(--ch-line);
   border-radius: var(--ch-radius-md);
   box-shadow: var(--ch-shadow-sm);
-}
-
-.ch-skip-link:focus {
-  position: fixed !important;
-  top: 12px;
-  left: 12px;
-  z-index: 9999;
-  width: auto;
-  height: auto;
-  padding: 0.7rem 1rem;
-  color: var(--ch-white);
-  background: var(--ch-ink);
-  clip: auto !important;
-  clip-path: none;
 }
 
 /* A two-color focus ring stays visible on both light and dark surfaces. */
