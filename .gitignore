@@ -1,0 +1,21 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Local build and runtime artifacts
+*.log
+*.zip
+.deploy/
+node_modules/
+
+# Secrets and private keys must never enter Git
+.env
+.env.*
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+capehart*_github_actions*

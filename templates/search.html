@@ -1,0 +1,57 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","className":"ch-header-template"} /-->
+
+<!-- wp:group {"tagName":"main","anchor":"main-content","align":"full","className":"ch-main ch-search","style":{"spacing":{"blockGap":"0","margin":{"top":"0","bottom":"0"}}},"layout":{"type":"default"}} -->
+<main id="main-content" class="wp-block-group alignfull ch-main ch-search" style="margin-top:0;margin-bottom:0">
+	<!-- wp:group {"align":"full","gradient":"hero","className":"ch-archive-hero","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignfull ch-archive-hero has-hero-gradient-background has-background" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:group {"align":"wide","layout":{"type":"constrained","contentSize":"900px","justifyContent":"left"}} -->
+		<div class="wp-block-group alignwide">
+			<!-- wp:paragraph {"textColor":"blue-dark","className":"ch-eyebrow"} --><p class="ch-eyebrow has-blue-dark-color has-text-color">Search Capehart</p><!-- /wp:paragraph -->
+			<!-- wp:query-title {"type":"search","level":1,"fontSize":"display"} /-->
+			<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search heating and cooling guides","buttonText":"Search","buttonUseIcon":true} /-->
+		</div>
+		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:group {"align":"full","className":"ch-archive-section","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
+	<div class="wp-block-group alignfull ch-archive-section" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--80)">
+		<!-- wp:query {"queryId":3,"query":{"perPage":10,"pages":0,"offset":0,"postType":"any","order":"desc","orderBy":"relevance","author":"","search":"","exclude":[],"sticky":"exclude","inherit":true},"align":"wide","className":"ch-search-query"} -->
+		<div class="wp-block-query alignwide ch-search-query">
+			<!-- wp:post-template {"className":"ch-search-results","layout":{"type":"default"}} -->
+				<!-- wp:group {"className":"ch-search-result","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+				<div class="wp-block-group ch-search-result" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40)">
+					<!-- wp:post-date {"textColor":"blue-dark","fontSize":"small"} /-->
+					<!-- wp:post-title {"isLink":true,"level":2,"fontSize":"x-large"} /-->
+					<!-- wp:post-excerpt {"moreText":"View page","showMoreOnNewLine":true,"excerptLength":32} /-->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:post-template -->
+
+			<!-- wp:query-pagination {"paginationArrow":"arrow","className":"ch-pagination","layout":{"type":"flex","justifyContent":"center"}} -->
+				<!-- wp:query-pagination-previous /-->
+				<!-- wp:query-pagination-numbers /-->
+				<!-- wp:query-pagination-next /-->
+			<!-- /wp:query-pagination -->
+
+			<!-- wp:query-no-results -->
+				<!-- wp:group {"className":"ch-empty-state","layout":{"type":"constrained","contentSize":"680px"}} -->
+				<div class="wp-block-group ch-empty-state">
+					<!-- wp:heading {"textAlign":"center","level":2} --><h2 class="wp-block-heading has-text-align-center">Nothing matched that search</h2><!-- /wp:heading -->
+					<!-- wp:paragraph {"align":"center","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color">Try a symptom, service, or equipment type—or contact Capehart for help choosing the right next step.</p><!-- /wp:paragraph -->
+					<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+					<div class="wp-block-buttons">
+						<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/contact/">Contact Capehart</a></div><!-- /wp:button -->
+					</div>
+					<!-- /wp:buttons -->
+				</div>
+				<!-- /wp:group -->
+			<!-- /wp:query-no-results -->
+		</div>
+		<!-- /wp:query -->
+	</div>
+	<!-- /wp:group -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

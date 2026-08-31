@@ -1,0 +1,59 @@
+:root {
+  --ch-ink: #102431;
+  --ch-blue-dark: #006da8;
+  --ch-red: #c91f27;
+  --ch-canvas: #f7fafb;
+  --ch-muted: #5c6b74;
+  --ch-line: #dbe5ea;
+}
+
+.editor-styles-wrapper {
+  color: var(--ch-ink);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.editor-styles-wrapper :where(h1, h2, h3, h4) {
+  color: var(--ch-ink);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+.editor-styles-wrapper .ch-section {
+  padding-block: 64px;
+}
+
+.editor-styles-wrapper .ch-section--soft {
+  background: var(--ch-canvas);
+}
+
+.editor-styles-wrapper .ch-eyebrow {
+  color: var(--ch-blue-dark);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.editor-styles-wrapper .ch-service-card,
+.editor-styles-wrapper .ch-card {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--ch-line);
+  border-radius: 18px;
+}
+
+.editor-styles-wrapper .wp-block-button__link {
+  color: #fff;
+  background: var(--ch-red);
+  border-radius: 11px;
+  font-weight: 800;
+}
+
+.editor-styles-wrapper .ch-hero,
+.editor-styles-wrapper .ch-service-hero,
+.editor-styles-wrapper .ch-final-cta {
+  padding: 48px;
+}

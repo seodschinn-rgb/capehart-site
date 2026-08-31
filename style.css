@@ -1,0 +1,17 @@
+/*
+Theme Name: Capehart Custom
+Theme URI: https://capeharthc.com/
+Author: Capehart Heating & Cooling
+Author URI: https://capeharthc.com/
+Description: A custom block theme for Capehart Heating & Cooling. Built with WordPress core blocks and no page-builder dependency.
+Requires at least: 6.8
+Tested up to: 6.8
+Requires PHP: 7.4
+Version: 1.0.0
+Text Domain: capehart-custom
+Tags: block-patterns, full-site-editing, wide-blocks, accessibility-ready, custom-logo, featured-images
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* Front-end and editor presentation live in assets/css and are enqueued by functions.php. */

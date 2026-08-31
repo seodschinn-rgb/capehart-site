@@ -1,0 +1,26 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","className":"ch-header-template"} /-->
+
+<!-- wp:group {"tagName":"main","anchor":"main-content","align":"full","className":"ch-main ch-index","style":{"spacing":{"blockGap":"0","margin":{"top":"0","bottom":"0"},"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
+<main id="main-content" class="wp-block-group alignfull ch-main ch-index" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--80)">
+	<!-- wp:heading {"level":1,"align":"wide","fontSize":"display"} --><h1 class="wp-block-heading alignwide has-display-font-size">Latest from Capehart</h1><!-- /wp:heading -->
+
+	<!-- wp:query {"queryId":4,"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"exclude","inherit":true},"align":"wide","className":"ch-post-query"} -->
+	<div class="wp-block-query alignwide ch-post-query">
+		<!-- wp:post-template {"className":"ch-post-grid","layout":{"type":"grid","columnCount":3}} -->
+			<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","sizeSlug":"capehart-card"} /-->
+			<!-- wp:post-terms {"term":"category","textColor":"blue-dark"} /-->
+			<!-- wp:post-title {"isLink":true,"level":2,"fontSize":"x-large"} /-->
+			<!-- wp:post-excerpt {"moreText":"Read more","showMoreOnNewLine":true,"excerptLength":28} /-->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination {"paginationArrow":"arrow","className":"ch-pagination","layout":{"type":"flex","justifyContent":"center"}} -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+	</div>
+	<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
