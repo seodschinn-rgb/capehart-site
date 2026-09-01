@@ -122,6 +122,35 @@
 		setItemState( item, shouldOpen );
 	}
 
+	function handleBackdropClick( event ) {
+		var target = event.target instanceof Element ? event.target : null;
+		var menu;
+		var panel;
+		var closeButton;
+
+		if ( ! target || ! mobileQuery.matches ) {
+			return;
+		}
+
+		menu = target.closest( openMenuSelector );
+
+		if ( ! menu ) {
+			return;
+		}
+
+		panel = menu.querySelector( '.wp-block-navigation__responsive-close' );
+
+		if ( ! panel || panel.contains( target ) ) {
+			return;
+		}
+
+		closeButton = menu.querySelector( '.wp-block-navigation__responsive-container-close' );
+
+		if ( closeButton ) {
+			closeButton.click();
+		}
+	}
+
 	function handleNavigationKeydown( event ) {
 		var menu;
 		var item;
@@ -168,6 +197,7 @@
 
 	if ( navigationRoot ) {
 		navigationRoot.addEventListener( 'click', handleToggleClick, true );
+		navigationRoot.addEventListener( 'click', handleBackdropClick );
 		navigationRoot.addEventListener( 'keydown', handleNavigationKeydown, true );
 
 		new MutationObserver( queueSync ).observe( navigationRoot, {
