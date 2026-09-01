@@ -2,7 +2,7 @@
   'use strict';
 
   var triggerSelector = '#ch-amelia-native-trigger';
-  var mountedRootSelector = '.amelia-v2-booking[data-v-app]';
+  var mountedRootSelector = '#ch-amelia-native-host .amelia-v2-booking[data-v-app]';
   var dialogRootSelector = '.amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew';
   var dialogSelector = '.el-dialog';
   var overlaySelector = '.el-overlay-dialog';

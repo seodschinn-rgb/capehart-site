@@ -163,7 +163,7 @@ function capehart_custom_booking_modal_shortcode() {
 		: sprintf( '[ameliastepbooking %s]', $shortcode_attributes );
 
 	$trigger = '<button id="ch-amelia-native-trigger" type="button" hidden tabindex="-1" aria-hidden="true" style="pointer-events:none"></button>';
-	$markup  = $trigger . do_shortcode( $shortcode );
+	$markup  = '<div id="ch-amelia-native-host">' . $trigger . do_shortcode( $shortcode ) . '</div>';
 
 	return $markup;
 }
