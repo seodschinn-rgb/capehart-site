@@ -29,7 +29,16 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 128px;
-  scrollbar-gutter: stable;
+}
+
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body.el-popup-parent--hidden {
+    width: auto !important;
+  }
 }
 
 body {
