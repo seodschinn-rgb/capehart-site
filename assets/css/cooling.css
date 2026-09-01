@@ -209,6 +209,7 @@
 }
 
 /* WordPress can add line-break elements around shortcode-generated markup. */
+.ch-cooling-actions > br,
 .ch-cooling-button br {
   display: none;
 }
