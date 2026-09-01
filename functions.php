@@ -11,6 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'CAPEHART_CUSTOM_VERSION', '1.0.0' );
 
+$capehart_cooling_pages_file = __DIR__ . '/inc/cooling-pages.php';
+
+if ( is_readable( $capehart_cooling_pages_file ) ) {
+	require_once $capehart_cooling_pages_file;
+}
+
 /**
  * Set up theme support shared by the front end and block editor.
  */
@@ -74,6 +80,30 @@ function capehart_custom_enqueue_assets() {
 			? (string) filemtime( get_theme_file_path( 'assets/css/theme.css' ) )
 			: CAPEHART_CUSTOM_VERSION
 	);
+
+	$cooling_stylesheet = get_theme_file_path( 'assets/css/cooling.css' );
+
+	if (
+		is_page(
+			array(
+				'air-conditioning',
+				'ac-repair-kiefer-ok',
+				'ac-repair-tulsa-ok',
+				'air-conditioning-maintenance',
+				'ac-installation-tulsa-ok',
+				'air-conditioning-replacement',
+				'emergency-ac-repair',
+			)
+		)
+		&& is_readable( $cooling_stylesheet )
+	) {
+		wp_enqueue_style(
+			'capehart-cooling-pages',
+			get_theme_file_uri( 'assets/css/cooling.css' ),
+			array( 'capehart-custom' ),
+			(string) filemtime( $cooling_stylesheet )
+		);
+	}
 
 	$floating_cta_script = get_theme_file_path( 'assets/js/floating-cta.js' );
 
@@ -258,6 +288,7 @@ function capehart_custom_booking_modal_shortcode() {
 		'air-conditioning-maintenance' => 1,
 		'air-conditioning-replacement' => 1,
 		'ac-installation-tulsa-ok'      => 1,
+		'ac-repair-kiefer-ok'           => 1,
 		'ac-repair-tulsa-ok'            => 1,
 		'emergency-ac-repair'           => 1,
 		'heating'                       => 2,
