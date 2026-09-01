@@ -471,6 +471,12 @@ body.el-popup-parent--hidden .ch-floating-cta {
   .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew .el-dialog {
     border-radius: 0;
   }
+
+  .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew > .el-overlay-dialog > .el-dialog > .el-dialog__body {
+    --am-dvh: 100%;
+    padding: 0 0 env(safe-area-inset-bottom, 0px);
+    overflow: hidden;
+  }
 }
 
 .ch-floating-cta__link {
