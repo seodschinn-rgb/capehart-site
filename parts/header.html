@@ -67,11 +67,22 @@
 </div>
 <!-- /wp:group -->
 
-<!-- wp:group {"align":"full","className":"ch-mobile-cta","layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull ch-mobile-cta">
+<!-- wp:group {"align":"full","className":"ch-floating-cta","layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull ch-floating-cta">
 	<!-- wp:html -->
-	<a href="tel:+19187711218">Call Capehart</a>
-	<a href="/book-appointment/">Schedule Service</a>
+	<a class="ch-floating-cta__link ch-floating-cta__link--schedule" href="/book-appointment/" aria-label="Schedule HVAC service">
+		<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
+			<rect x="3" y="5" width="18" height="16" rx="2"></rect>
+			<path d="M8 3v4M16 3v4M3 10h18"></path>
+		</svg>
+		<span class="ch-floating-cta__label" aria-hidden="true">Schedule Service</span>
+	</a>
+	<a class="ch-floating-cta__link ch-floating-cta__link--call" href="tel:+19187711218" aria-label="Call Capehart at (918) 771-1218">
+		<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
+			<path d="M6.6 10.8c1.5 3 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.7 3.8.7.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.7 3.8.1.4 0 .8-.2 1.1l-2.4 2.2Z"></path>
+		</svg>
+		<span class="ch-floating-cta__label" aria-hidden="true">Call Capehart</span>
+	</a>
 	<!-- /wp:html -->
 </div>
 <!-- /wp:group -->

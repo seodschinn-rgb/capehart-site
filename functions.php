@@ -63,7 +63,7 @@ function capehart_custom_setup() {
 add_action( 'after_setup_theme', 'capehart_custom_setup' );
 
 /**
- * Load the dependency-free front-end theme stylesheet.
+ * Load the dependency-free front-end theme assets.
  */
 function capehart_custom_enqueue_assets() {
 	wp_enqueue_style(
@@ -74,6 +74,21 @@ function capehart_custom_enqueue_assets() {
 			? (string) filemtime( get_theme_file_path( 'assets/css/theme.css' ) )
 			: CAPEHART_CUSTOM_VERSION
 	);
+
+	$floating_cta_script = get_theme_file_path( 'assets/js/floating-cta.js' );
+
+	if ( file_exists( $floating_cta_script ) ) {
+		wp_enqueue_script(
+			'capehart-floating-cta',
+			get_theme_file_uri( 'assets/js/floating-cta.js' ),
+			array(),
+			(string) filemtime( $floating_cta_script ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'capehart_custom_enqueue_assets' );
 

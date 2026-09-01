@@ -422,8 +422,122 @@ a.ch-button--ghost:hover {
   box-shadow: none;
 }
 
-.ch-mobile-cta {
-  display: none;
+.ch-floating-cta,
+.ch-floating-cta.wp-block-group {
+  position: fixed;
+  left: calc(clamp(1rem, 2vw, 1.75rem) + env(safe-area-inset-left));
+  bottom: calc(clamp(1rem, 2vw, 1.75rem) + env(safe-area-inset-bottom));
+  z-index: 80;
+  width: auto;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 280ms ease, transform 280ms ease, visibility 280ms ease;
+  will-change: opacity, transform;
+}
+
+.ch-floating-cta.is-scroll-hidden,
+html.has-modal-open .ch-floating-cta {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, 0.85rem, 0);
+}
+
+.ch-floating-cta__link {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  display: grid;
+  flex: 0 0 4rem;
+  place-items: center;
+  margin: 0 !important;
+  color: var(--ch-white);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(16, 36, 49, 0.22);
+  text-decoration: none;
+  transition: color 200ms ease, background-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.ch-floating-cta__link--schedule {
+  background: var(--ch-red);
+}
+
+.ch-floating-cta__link--call {
+  background: var(--ch-blue-dark);
+}
+
+.ch-floating-cta__link svg {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ch-floating-cta__link--call svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ch-floating-cta__link:hover,
+.ch-floating-cta__link:focus-visible {
+  color: var(--ch-white);
+  box-shadow: 0 12px 28px rgba(16, 36, 49, 0.28);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.ch-floating-cta__link--schedule:hover,
+.ch-floating-cta__link--schedule:focus-visible {
+  background: var(--ch-red-dark);
+}
+
+.ch-floating-cta__link--call:hover,
+.ch-floating-cta__link--call:focus-visible {
+  background: var(--ch-ink);
+}
+
+.ch-floating-cta__link:active {
+  transform: scale(0.96);
+}
+
+.ch-floating-cta__label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.75rem);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.7rem;
+  color: var(--ch-ink);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--ch-line);
+  border-radius: 9px;
+  box-shadow: var(--ch-shadow-sm);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-0.35rem, -50%);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+}
+
+.ch-floating-cta__link:hover .ch-floating-cta__label,
+.ch-floating-cta__link:focus-visible .ch-floating-cta__label {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
 }
 
 /* Homepage hero */
@@ -1530,10 +1644,6 @@ a.ch-button--ghost:hover {
 }
 
 @media (max-width: 900px) {
-  body {
-    padding-bottom: 66px;
-  }
-
   .ch-shell,
   .ch-shell.wp-block-group,
   .ch-shell.wp-block-columns,
@@ -1783,38 +1893,6 @@ a.ch-button--ghost:hover {
     display: none !important;
   }
 
-  .ch-mobile-cta {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 120;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    padding: 7px;
-    background: var(--ch-white);
-    border-top: 1px solid var(--ch-line);
-    box-shadow: 0 -10px 28px rgba(16, 36, 49, 0.14);
-  }
-
-  .ch-mobile-cta a {
-    min-height: 50px;
-    display: grid;
-    place-items: center;
-    color: var(--ch-white);
-    background: var(--ch-ink);
-    border-radius: 8px 0 0 8px;
-    font-size: 0.85rem;
-    font-weight: 850;
-    text-decoration: none;
-  }
-
-  .ch-mobile-cta a:last-child {
-    background: var(--ch-red);
-    border-radius: 0 8px 8px 0;
-  }
-
   .ch-hero__grid,
   .ch-split,
   .ch-service-hero__grid,
@@ -1878,6 +1956,28 @@ a.ch-button--ghost:hover {
 
   .ch-header-row .wp-block-site-logo img {
     max-width: 150px;
+  }
+
+  .ch-floating-cta,
+  .ch-floating-cta.wp-block-group {
+    left: calc(1.35rem + env(safe-area-inset-left));
+    bottom: calc(1.35rem + env(safe-area-inset-bottom));
+    gap: 0.8rem;
+  }
+
+  .ch-floating-cta__link {
+    width: 3.65rem;
+    height: 3.65rem;
+    flex-basis: 3.65rem;
+  }
+
+  .ch-floating-cta__link svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ch-floating-cta__label {
+    display: none;
   }
 
   .ch-hero {
@@ -1993,5 +2093,11 @@ a.ch-button--ghost:hover {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .ch-floating-cta,
+  .ch-floating-cta__link,
+  .ch-floating-cta__label {
+    transform: none !important;
   }
 }
