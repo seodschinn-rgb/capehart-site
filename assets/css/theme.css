@@ -1889,10 +1889,12 @@ a.ch-booking-trigger {
     width: 16px;
     height: 16px;
     margin: 0;
+    transform: none;
     transition: transform 180ms ease;
   }
 
-  .ch-header-row ul.ch-nav.wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-icon[aria-expanded="true"] svg {
+  .ch-header-row ul.ch-nav.wp-block-navigation__container > .has-child.is-ch-submenu-open > .wp-block-navigation__submenu-icon svg,
+  html:not(.ch-mobile-nav-enhanced) .ch-header-row ul.ch-nav.wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-icon[aria-expanded="true"] svg {
     transform: rotate(180deg);
   }
 
@@ -1916,7 +1918,8 @@ a.ch-booking-trigger {
     box-shadow: none;
   }
 
-  .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child > .wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container {
+  .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child.is-ch-submenu-open > .wp-block-navigation__submenu-container,
+  html:not(.ch-mobile-nav-enhanced) .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child > .wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container {
     height: auto;
     padding: 0.45rem 0.55rem 0.65rem;
     display: grid;
@@ -2507,7 +2510,8 @@ html {
     border-radius: 10px;
   }
 
-  .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child > .wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container {
+  .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child.is-ch-submenu-open > .wp-block-navigation__submenu-container,
+  html:not(.ch-mobile-nav-enhanced) .ch-header-row .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content ul.ch-nav > .has-child > .wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container {
     padding: 0.3rem 0.35rem 0.45rem 0.7rem;
   }
 

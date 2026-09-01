@@ -182,6 +182,21 @@ function capehart_custom_enqueue_assets() {
 			)
 		);
 	}
+
+	$mobile_navigation_script = get_theme_file_path( 'assets/js/mobile-navigation.js' );
+
+	if ( file_exists( $mobile_navigation_script ) ) {
+		wp_enqueue_script(
+			'capehart-mobile-navigation',
+			get_theme_file_uri( 'assets/js/mobile-navigation.js' ),
+			array(),
+			(string) filemtime( $mobile_navigation_script ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'capehart_custom_enqueue_assets' );
 
