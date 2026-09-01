@@ -753,3 +753,25 @@ function capehart_custom_homepage_schema_fallback() {
 	);
 }
 add_action( 'wp_head', 'capehart_custom_homepage_schema_fallback', 20 );
+
+/**
+ * Render the repository-owned homepage layout without relying on the theme
+ * pattern registry. Some persistent WordPress object-cache configurations can
+ * lag behind a deployment when a brand-new pattern file is introduced.
+ *
+ * @return string Rendered homepage blocks.
+ */
+function capehart_custom_homepage_shortcode() {
+	$pattern_file = get_theme_file_path( 'patterns/home-seo-landing.php' );
+
+	if ( ! is_readable( $pattern_file ) ) {
+		return '';
+	}
+
+	ob_start();
+	include $pattern_file;
+	$pattern_content = (string) ob_get_clean();
+
+	return do_blocks( $pattern_content );
+}
+add_shortcode( 'capehart_homepage', 'capehart_custom_homepage_shortcode' );
