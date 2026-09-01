@@ -2548,15 +2548,46 @@ html {
 }
 
 @media (max-width: 620px) {
+  html {
+    scroll-padding-top: 112px;
+  }
+
+  .ch-utility {
+    display: block !important;
+  }
+
+  .ch-utility .ch-shell {
+    width: min(calc(100% - 24px), var(--ch-container));
+    min-height: 30px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ch-utility-location {
+    font-size: 0.7rem;
+    letter-spacing: 0.025em;
+  }
+
+  .ch-utility-location::before {
+    width: 5px;
+    height: 5px;
+    flex-basis: 5px;
+  }
+
+  .ch-utility .ch-utility-secondary {
+    display: none !important;
+  }
+
   .ch-header-row,
   .ch-header-row.ch-shell {
-    width: min(calc(100% - 32px), var(--ch-container));
-    min-height: 66px;
+    width: min(calc(100% - 24px), var(--ch-container));
+    min-height: 74px;
   }
 
   .ch-header-row .wp-block-site-logo img {
-    max-width: 138px;
-    max-height: 44px;
+    width: 112px;
+    max-width: 112px;
+    max-height: 54px;
   }
 
   .ch-header-row .wp-block-navigation__responsive-close {
