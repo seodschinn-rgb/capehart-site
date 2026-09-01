@@ -12,9 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'CAPEHART_CUSTOM_VERSION', '1.0.0' );
 
 $capehart_cooling_pages_file = __DIR__ . '/inc/cooling-pages.php';
+$capehart_services_page_file = __DIR__ . '/inc/services-page.php';
 
 if ( is_readable( $capehart_cooling_pages_file ) ) {
 	require_once $capehart_cooling_pages_file;
+}
+
+if ( is_readable( $capehart_services_page_file ) ) {
+	require_once $capehart_services_page_file;
 }
 
 /**
@@ -102,6 +107,17 @@ function capehart_custom_enqueue_assets() {
 			get_theme_file_uri( 'assets/css/cooling.css' ),
 			array( 'capehart-custom' ),
 			(string) filemtime( $cooling_stylesheet )
+		);
+	}
+
+	$services_stylesheet = get_theme_file_path( 'assets/css/services.css' );
+
+	if ( is_page( 'services' ) && is_readable( $services_stylesheet ) ) {
+		wp_enqueue_style(
+			'capehart-services-page',
+			get_theme_file_uri( 'assets/css/services.css' ),
+			array( 'capehart-custom' ),
+			(string) filemtime( $services_stylesheet )
 		);
 	}
 
