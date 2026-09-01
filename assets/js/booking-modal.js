@@ -118,12 +118,17 @@
 
   new MutationObserver(function () {
     var isOpen = document.body.classList.contains('el-popup-parent--hidden');
+    var focusTarget;
 
     if (wasOpen && !isOpen && opener && opener.isConnected) {
+      focusTarget = opener;
+      opener = null;
+
       window.setTimeout(function () {
-        opener.focus({ preventScroll: true });
-        opener = null;
-      }, 0);
+        if (focusTarget.isConnected) {
+          focusTarget.focus({ preventScroll: true });
+        }
+      }, 350);
     }
 
     wasOpen = isOpen;
