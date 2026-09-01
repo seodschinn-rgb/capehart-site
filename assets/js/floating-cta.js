@@ -11,8 +11,8 @@
 	var scrollReferenceY = Math.max( window.scrollY, 0 );
 	var scrollHidden = false;
 	var footerVisible = false;
-	var aboutHero = document.querySelector( '.ch-about-hero' );
-	var aboutHeroVisible = false;
+	var pageHero = document.querySelector( '.ch-about-hero, .ch-contact-page-hero' );
+	var pageHeroVisible = false;
 	var ticking = false;
 	var activeHiddenState = false;
 	var topThreshold = 72;
@@ -40,7 +40,7 @@
 	}
 
 	function applyVisibility() {
-		var shouldHide = scrollHidden || footerVisible || aboutHeroVisible;
+		var shouldHide = scrollHidden || footerVisible || pageHeroVisible;
 
 		if ( shouldHide && floatingCta.matches( ':focus-within' ) ) {
 			return;
@@ -56,23 +56,23 @@
 		setInteractiveState( shouldHide );
 	}
 
-	function updateAboutHeroVisibility() {
+	function updatePageHeroVisibility() {
 		var bounds;
 
-		if ( ! aboutHero ) {
-			aboutHeroVisible = false;
+		if ( ! pageHero ) {
+			pageHeroVisible = false;
 			return;
 		}
 
-		bounds = aboutHero.getBoundingClientRect();
-		aboutHeroVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+		bounds = pageHero.getBoundingClientRect();
+		pageHeroVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
 	}
 
 	function updateFromScroll() {
 		var currentScrollY = Math.max( window.scrollY, 0 );
 		var delta = currentScrollY - scrollReferenceY;
 
-		updateAboutHeroVisibility();
+		updatePageHeroVisibility();
 
 		if ( currentScrollY <= topThreshold ) {
 			scrollHidden = false;
@@ -124,6 +124,6 @@
 		footerObserver.observe( footer );
 	}
 
-	updateAboutHeroVisibility();
+	updatePageHeroVisibility();
 	applyVisibility();
 }() );
