@@ -108,7 +108,7 @@ function capehart_custom_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'capehart_custom_enqueue_assets' );
 
 /**
- * Register Amelia's native dialog for the global booking triggers.
+ * Build Amelia's native dialog for the global booking triggers.
  *
  * The standalone appointment page keeps its own form as a no-JavaScript
  * fallback, so the modal copy is intentionally omitted there.
@@ -167,8 +167,6 @@ function capehart_custom_booking_modal_shortcode() {
 
 	return $markup;
 }
-add_shortcode( 'capehart_amelia_booking_modal', 'capehart_custom_booking_modal_shortcode' );
-
 /**
  * Let Amelia enqueue its dialog stylesheet before wp_head prints styles.
  */
@@ -176,6 +174,15 @@ function capehart_custom_prime_booking_modal() {
 	capehart_custom_booking_modal_shortcode();
 }
 add_action( 'wp_enqueue_scripts', 'capehart_custom_prime_booking_modal', 20 );
+
+/**
+ * Print the cached dialog markup before footer scripts execute.
+ */
+function capehart_custom_output_booking_modal() {
+	// Amelia returns the executable markup required to mount its Vue dialog.
+	echo capehart_custom_booking_modal_shortcode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'wp_footer', 'capehart_custom_output_booking_modal', 5 );
 
 /**
  * Turn every same-site appointment link into an Amelia dialog trigger.
