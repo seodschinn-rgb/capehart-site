@@ -1107,6 +1107,7 @@
 
   .ch-contact-page-hero__visual {
     width: 100%;
+    display: block;
   }
 
   .ch-contact-page-hero__visual figure {
