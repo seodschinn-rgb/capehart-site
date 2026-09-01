@@ -775,3 +775,24 @@ function capehart_custom_homepage_shortcode() {
 	return do_blocks( $pattern_content );
 }
 add_shortcode( 'capehart_homepage', 'capehart_custom_homepage_shortcode' );
+
+/**
+ * Replace the media-library placeholder alt text on the shared site logo.
+ *
+ * @param string $html Rendered custom-logo markup.
+ * @return string
+ */
+function capehart_custom_logo_alt_text( $html ) {
+	if ( ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $html;
+	}
+
+	$processor = new WP_HTML_Tag_Processor( $html );
+
+	if ( $processor->next_tag( 'img' ) ) {
+		$processor->set_attribute( 'alt', __( 'Capehart Heating & Cooling', 'capehart-custom' ) );
+	}
+
+	return $processor->get_updated_html();
+}
+add_filter( 'get_custom_logo', 'capehart_custom_logo_alt_text', 20 );

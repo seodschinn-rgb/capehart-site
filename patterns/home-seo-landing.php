@@ -263,7 +263,7 @@
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","sizeSlug":"capehart-card","className":"ch-guide-card__image"} /-->
 
 <!-- wp:group {"className":"ch-guide-card__body","layout":{"type":"constrained"}} -->
-<div class="wp-block-group ch-guide-card__body"><!-- wp:post-terms {"term":"category","className":"ch-guide-card__meta"} /-->
+<div class="wp-block-group ch-guide-card__body"><!-- wp:post-date {"format":"M j, Y","className":"ch-guide-card__meta"} /-->
 <!-- wp:post-title {"level":3,"isLink":true} /-->
 <!-- wp:post-excerpt {"moreText":"","excerptLength":22} /-->
 <!-- wp:read-more {"content":"Read the guide →","className":"ch-guide-card__link"} /--></div>
