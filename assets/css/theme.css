@@ -29,6 +29,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 128px;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -455,6 +456,10 @@ a.ch-booking-trigger.is-booking-pending {
   cursor: progress;
 }
 
+a.ch-booking-trigger {
+  touch-action: manipulation;
+}
+
 .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew {
   background: rgba(7, 22, 32, 0.78);
   backdrop-filter: blur(6px);
@@ -474,6 +479,14 @@ a.ch-booking-trigger.is-booking-pending {
 @media (max-width: 768px) {
   .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew .el-dialog {
     border-radius: 0;
+  }
+
+  .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew :where(input, select, textarea) {
+    font-size: 16px !important;
+  }
+
+  .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew :where(button, [role="button"], [role="combobox"], input, select, textarea) {
+    touch-action: manipulation;
   }
 
   .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew > .el-overlay-dialog > .el-dialog > .el-dialog__body {
@@ -540,6 +553,14 @@ a.ch-booking-trigger.is-booking-pending {
 
 .ch-floating-cta__link:active {
   transform: scale(0.96);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ch-floating-cta__link--schedule:hover,
+  .ch-floating-cta__link--schedule:focus-visible,
+  .ch-floating-cta__link--schedule:active {
+    transform: none;
+  }
 }
 
 .ch-floating-cta__label {
