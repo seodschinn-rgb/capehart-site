@@ -492,7 +492,7 @@ function capehart_custom_render_cooling_hub() {
 					<p>A symptom does not identify the cause by itself. It does give the technician a better starting point when you describe where, when, and how often it occurs.</p>
 				</div>
 				<div class="ch-cooling-symptoms__grid">
-					<article><h3>Warm air</h3><p>The system runs, but the air from the vents does not feel cool.</p></article>
+					<article><h3>Warm air</h3><p>The system runs, but the air from the vents does not feel cool. <a href="<?php echo esc_url( home_url( '/ac-blowing-warm-air/' ) ); ?>">Use the warm-air troubleshooting guide</a>.</p></article>
 					<article><h3>Weak airflow</h3><p>Some or all rooms receive less airflow than expected.</p></article>
 					<article><h3>Frequent cycling</h3><p>The equipment starts and stops in a new or unusual pattern.</p></article>
 					<article><h3>Water or ice</h3><p>Moisture appears near the system, or visible components begin to freeze.</p></article>
