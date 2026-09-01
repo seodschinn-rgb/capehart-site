@@ -469,3 +469,287 @@ function capehart_custom_copyright_shortcode() {
 	);
 }
 add_shortcode( 'capehart_copyright', 'capehart_custom_copyright_shortcode' );
+
+/**
+ * Return the verified residential service area used on the homepage and in
+ * structured data. Keeping one source prevents the visible copy and schema
+ * from drifting apart.
+ *
+ * @return string[]
+ */
+function capehart_custom_homepage_service_areas() {
+	return array(
+		'Kiefer',
+		'Tulsa',
+		'Broken Arrow',
+		'Bixby',
+		'Jenks',
+		'Glenpool',
+		'Sapulpa',
+		'Sand Springs',
+		'Owasso',
+		'Catoosa',
+		'Mounds',
+		'Kellyville',
+		'Bristow',
+		'Mannford',
+	);
+}
+
+/**
+ * Return the visible homepage FAQs for both the Details blocks and JSON-LD.
+ *
+ * @return array<int, array{question: string, answer: string}>
+ */
+function capehart_custom_homepage_faqs() {
+	return array(
+		array(
+			'question' => __( 'Where is Capehart Heating & Cooling based?', 'capehart-custom' ),
+			'answer'   => __( 'Capehart Heating & Cooling is based in Kiefer, Oklahoma. The company serves homeowners in Kiefer and communities throughout the Greater Tulsa area.', 'capehart-custom' ),
+		),
+		array(
+			'question' => __( 'What areas does Capehart serve?', 'capehart-custom' ),
+			'answer'   => __( 'The residential service area includes Kiefer, Tulsa, Broken Arrow, Bixby, Jenks, Glenpool, Sapulpa, Sand Springs, Owasso, Catoosa, Mounds, Kellyville, Bristow, and Mannford. Contact Capehart with the property address to confirm current coverage and availability.', 'capehart-custom' ),
+		),
+		array(
+			'question' => __( 'What heating and cooling services can I schedule?', 'capehart-custom' ),
+			'answer'   => __( 'Capehart provides air conditioning and heating repair, seasonal maintenance, installation, and replacement planning. Dryer vent cleaning is also available as a separate home-care service.', 'capehart-custom' ),
+		),
+		array(
+			'question' => __( 'Should I request repair, maintenance, or replacement planning?', 'capehart-custom' ),
+			'answer'   => __( 'Choose repair for an active fault such as no cooling, no heat, or unreliable operation. Maintenance is intended for equipment that is currently operating, while replacement planning makes sense when age, comfort, efficiency concerns, or repair history create a larger decision.', 'capehart-custom' ),
+		),
+		array(
+			'question' => __( 'What information should I provide when scheduling?', 'capehart-custom' ),
+			'answer'   => __( 'Provide the service address, the type of equipment involved, what the system is doing, and when the problem began. Include model information only when it is easy to read safely; do not remove panels or handle electrical, gas, or refrigerant components.', 'capehart-custom' ),
+		),
+	);
+}
+
+/**
+ * Give the homepage a focused local-company title in Yoast SEO outputs.
+ *
+ * @param string $title Existing title.
+ * @return string
+ */
+function capehart_custom_homepage_seo_title( $title ) {
+	if ( is_front_page() ) {
+		return __( 'HVAC Company in Kiefer, OK | Capehart Heating & Cooling', 'capehart-custom' );
+	}
+
+	return $title;
+}
+add_filter( 'wpseo_title', 'capehart_custom_homepage_seo_title', 20 );
+add_filter( 'wpseo_opengraph_title', 'capehart_custom_homepage_seo_title', 20 );
+add_filter( 'wpseo_twitter_title', 'capehart_custom_homepage_seo_title', 20 );
+
+/**
+ * Give the homepage a concise description that matches the visible offer.
+ *
+ * @param string $description Existing description.
+ * @return string
+ */
+function capehart_custom_homepage_seo_description( $description ) {
+	if ( is_front_page() ) {
+		return __( 'Kiefer-based Capehart provides heating and air conditioning repair, maintenance and replacement across Greater Tulsa. Call or schedule HVAC service online.', 'capehart-custom' );
+	}
+
+	return $description;
+}
+add_filter( 'wpseo_metadesc', 'capehart_custom_homepage_seo_description', 20 );
+add_filter( 'wpseo_opengraph_desc', 'capehart_custom_homepage_seo_description', 20 );
+add_filter( 'wpseo_twitter_description', 'capehart_custom_homepage_seo_description', 20 );
+
+/**
+ * Provide core title and description fallbacks when Yoast SEO is unavailable.
+ *
+ * @param array<string, string> $parts Document title parts.
+ * @return array<string, string>
+ */
+function capehart_custom_homepage_document_title( $parts ) {
+	if ( is_front_page() && ! defined( 'WPSEO_VERSION' ) ) {
+		$parts['title'] = __( 'HVAC Company in Kiefer, OK | Capehart Heating & Cooling', 'capehart-custom' );
+		unset( $parts['site'], $parts['tagline'] );
+	}
+
+	return $parts;
+}
+add_filter( 'document_title_parts', 'capehart_custom_homepage_document_title', 20 );
+
+/**
+ * Output a description fallback only when no Yoast head presenter is active.
+ */
+function capehart_custom_homepage_meta_fallback() {
+	if ( ! is_front_page() || defined( 'WPSEO_VERSION' ) ) {
+		return;
+	}
+
+	printf(
+		'<meta name="description" content="%s">' . "\n",
+		esc_attr( capehart_custom_homepage_seo_description( '' ) )
+	);
+}
+add_action( 'wp_head', 'capehart_custom_homepage_meta_fallback', 5 );
+
+/**
+ * Enrich Yoast's existing Organization entity as an HVAC business and append
+ * FAQ schema generated from the same answers visitors can read on the page.
+ *
+ * @param array<int, array<string, mixed>> $graph Yoast schema graph.
+ * @return array<int, array<string, mixed>>
+ */
+function capehart_custom_homepage_schema_graph( $graph ) {
+	if ( ! is_front_page() || ! is_array( $graph ) ) {
+		return $graph;
+	}
+
+	$home_url     = trailingslashit( home_url( '/' ) );
+	$area_served  = array();
+	$has_business = false;
+	$has_faq      = false;
+
+	foreach ( capehart_custom_homepage_service_areas() as $area ) {
+		$area_served[] = array(
+			'@type' => 'City',
+			'name'  => $area . ', Oklahoma',
+		);
+	}
+
+	foreach ( $graph as &$piece ) {
+		$types = isset( $piece['@type'] ) ? (array) $piece['@type'] : array();
+		$id    = isset( $piece['@id'] ) ? (string) $piece['@id'] : '';
+
+		if ( in_array( 'FAQPage', $types, true ) ) {
+			$has_faq = true;
+		}
+
+		if ( in_array( 'Organization', $types, true ) || $home_url . '#organization' === $id ) {
+			$piece['@type']      = 'HVACBusiness';
+			$piece['name']       = 'Capehart Heating & Cooling';
+			$piece['legalName']  = 'Capehart Heating & Cooling';
+			$piece['url']        = $home_url;
+			$piece['telephone']  = '+1-918-771-1218';
+			$piece['address']    = array(
+				'@type'           => 'PostalAddress',
+				'addressLocality' => 'Kiefer',
+				'addressRegion'   => 'OK',
+				'addressCountry'  => 'US',
+			);
+			$piece['areaServed'] = $area_served;
+			$has_business        = true;
+		}
+	}
+	unset( $piece );
+
+	if ( ! $has_business ) {
+		$graph[] = array(
+			'@type'      => 'HVACBusiness',
+			'@id'        => $home_url . '#organization',
+			'name'       => 'Capehart Heating & Cooling',
+			'legalName'  => 'Capehart Heating & Cooling',
+			'url'        => $home_url,
+			'telephone'  => '+1-918-771-1218',
+			'address'    => array(
+				'@type'           => 'PostalAddress',
+				'addressLocality' => 'Kiefer',
+				'addressRegion'   => 'OK',
+				'addressCountry'  => 'US',
+			),
+			'areaServed' => $area_served,
+		);
+	}
+
+	if ( ! $has_faq ) {
+		$main_entity = array();
+
+		foreach ( capehart_custom_homepage_faqs() as $faq ) {
+			$main_entity[] = array(
+				'@type'          => 'Question',
+				'name'           => wp_strip_all_tags( $faq['question'] ),
+				'acceptedAnswer' => array(
+					'@type' => 'Answer',
+					'text'  => wp_strip_all_tags( $faq['answer'] ),
+				),
+			);
+		}
+
+		$graph[] = array(
+			'@type'      => 'FAQPage',
+			'@id'        => $home_url . '#homepage-faq',
+			'url'        => $home_url . '#homepage-faq',
+			'name'       => 'Capehart Heating & Cooling service FAQs',
+			'isPartOf'   => array( '@id' => $home_url ),
+			'inLanguage' => 'en-US',
+			'mainEntity' => $main_entity,
+		);
+	}
+
+	return $graph;
+}
+add_filter( 'wpseo_schema_graph', 'capehart_custom_homepage_schema_graph', 20 );
+
+/**
+ * Print equivalent homepage schema when Yoast SEO is unavailable.
+ */
+function capehart_custom_homepage_schema_fallback() {
+	if ( ! is_front_page() || defined( 'WPSEO_VERSION' ) ) {
+		return;
+	}
+
+	$home_url    = trailingslashit( home_url( '/' ) );
+	$area_served = array();
+	$questions   = array();
+
+	foreach ( capehart_custom_homepage_service_areas() as $area ) {
+		$area_served[] = array(
+			'@type' => 'City',
+			'name'  => $area . ', Oklahoma',
+		);
+	}
+
+	foreach ( capehart_custom_homepage_faqs() as $faq ) {
+		$questions[] = array(
+			'@type'          => 'Question',
+			'name'           => wp_strip_all_tags( $faq['question'] ),
+			'acceptedAnswer' => array(
+				'@type' => 'Answer',
+				'text'  => wp_strip_all_tags( $faq['answer'] ),
+			),
+		);
+	}
+
+	$schema = array(
+		'@context' => 'https://schema.org',
+		'@graph'   => array(
+			array(
+				'@type'      => 'HVACBusiness',
+				'@id'        => $home_url . '#organization',
+				'name'       => 'Capehart Heating & Cooling',
+				'legalName'  => 'Capehart Heating & Cooling',
+				'url'        => $home_url,
+				'telephone'  => '+1-918-771-1218',
+				'address'    => array(
+					'@type'           => 'PostalAddress',
+					'addressLocality' => 'Kiefer',
+					'addressRegion'   => 'OK',
+					'addressCountry'  => 'US',
+				),
+				'areaServed' => $area_served,
+			),
+			array(
+				'@type'      => 'FAQPage',
+				'@id'        => $home_url . '#homepage-faq',
+				'url'        => $home_url . '#homepage-faq',
+				'name'       => 'Capehart Heating & Cooling service FAQs',
+				'inLanguage' => 'en-US',
+				'mainEntity' => $questions,
+			),
+		),
+	);
+
+	printf(
+		'<script type="application/ld+json">%s</script>' . "\n",
+		wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	);
+}
+add_action( 'wp_head', 'capehart_custom_homepage_schema_fallback', 20 );
