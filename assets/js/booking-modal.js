@@ -114,7 +114,7 @@
 
     pointerStartedOutside = false;
     closeDialog(overlay.closest(dialogRootSelector));
-  });
+  }, true);
 
   new MutationObserver(function () {
     var isOpen = document.body.classList.contains('el-popup-parent--hidden');
