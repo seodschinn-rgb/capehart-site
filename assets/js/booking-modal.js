@@ -18,6 +18,9 @@
   var pendingBookingTimer = 0;
   var bookingReadyTimeout = 10000;
   var bookingReadyPollInterval = 100;
+  var mobileBookingMedia = window.matchMedia('(max-width: 768px)');
+  var serviceSelectFieldSelector = '.am-service-select';
+  var serviceSelectInputSelector = '.am-adv-select input.el-input__inner';
   var bookingBridge = window.capehartBookingBridge;
   var earlyBookingRequest = bookingBridge && typeof bookingBridge.take === 'function'
     ? bookingBridge.take()
@@ -97,6 +100,55 @@
       window.clearTimeout(focusRestoreTimer);
       focusRestoreTimer = 0;
     }
+  }
+
+  function configureNonTypingServiceField(field) {
+    var input;
+
+    if (!mobileBookingMedia.matches || !field) {
+      return;
+    }
+
+    input = field.querySelector(serviceSelectInputSelector);
+
+    if (!input || input.disabled) {
+      return;
+    }
+
+    input.readOnly = true;
+    input.setAttribute('readonly', '');
+    input.setAttribute('inputmode', 'none');
+    input.setAttribute('aria-readonly', 'true');
+  }
+
+  function configureMobileServiceFields(root) {
+    var fields;
+
+    if (!mobileBookingMedia.matches || !root) {
+      return;
+    }
+
+    fields = root.querySelectorAll(serviceSelectFieldSelector);
+
+    for (var index = 0; index < fields.length; index += 1) {
+      configureNonTypingServiceField(fields[index]);
+    }
+  }
+
+  function suppressMobileServiceKeyboard(target) {
+    var field;
+
+    if (!mobileBookingMedia.matches || !(target instanceof Element)) {
+      return;
+    }
+
+    field = target.closest(serviceSelectFieldSelector);
+
+    if (!field || !field.closest(dialogRootSelector)) {
+      return;
+    }
+
+    configureNonTypingServiceField(field);
   }
 
   function openBookingDialog(link, trigger) {
@@ -208,6 +260,7 @@
     var target = event.target instanceof Element ? event.target : null;
     var overlay = target ? target.closest(overlaySelector) : null;
 
+    suppressMobileServiceKeyboard(target);
     pointerStartedOutside = Boolean(overlay && !target.closest(dialogSelector));
   }, true);
 
@@ -227,6 +280,10 @@
   new MutationObserver(function () {
     var isOpen = document.body.classList.contains('el-popup-parent--hidden');
     var focusTarget;
+
+    if (isOpen) {
+      configureMobileServiceFields(getOpenDialogRoot());
+    }
 
     if (wasOpen && !isOpen && opener && opener.isConnected) {
       focusTarget = opener;
