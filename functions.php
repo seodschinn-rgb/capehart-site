@@ -352,6 +352,36 @@ function capehart_custom_add_booking_trigger_class( $block_content ) {
 add_filter( 'render_block', 'capehart_custom_add_booking_trigger_class', 20 );
 
 /**
+ * Give the header navigation one concise landmark label.
+ *
+ * Core can duplicate a Navigation block's ariaLabel while merging wrapper
+ * attributes, so the label is applied to the rendered header navigation.
+ *
+ * @param string $block_content Rendered Navigation block markup.
+ * @param array  $block         Parsed block data.
+ * @return string
+ */
+function capehart_custom_label_primary_navigation( $block_content, $block ) {
+	$class_name = isset( $block['attrs']['className'] ) ? (string) $block['attrs']['className'] : '';
+
+	if (
+		! class_exists( 'WP_HTML_Tag_Processor' )
+		|| ! preg_match( '/(?:^|\s)ch-nav(?:\s|$)/', $class_name )
+	) {
+		return $block_content;
+	}
+
+	$processor = new WP_HTML_Tag_Processor( $block_content );
+
+	if ( $processor->next_tag( 'nav' ) ) {
+		$processor->set_attribute( 'aria-label', __( 'Primary navigation', 'capehart-custom' ) );
+	}
+
+	return $processor->get_updated_html();
+}
+add_filter( 'render_block_core/navigation', 'capehart_custom_label_primary_navigation', 10, 2 );
+
+/**
  * Group the bundled theme patterns and expose the theme button variants.
  */
 function capehart_custom_register_block_assets() {
