@@ -24,7 +24,7 @@
   overflow-wrap: break-word;
 }
 
-.ch-about-page > br,
+.ch-about-page br,
 .ch-about-page p:empty {
   display: none;
 }
