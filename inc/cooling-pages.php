@@ -319,14 +319,33 @@ function capehart_custom_render_cooling_subnav( $current_slug ) {
  * @param string $schedule_label Schedule link label.
  * @param string $call_label     Phone link label.
  */
-function capehart_custom_render_cooling_actions( $schedule_label = 'Schedule service', $call_label = 'Call (918) 771-1218' ) {
+function capehart_custom_render_cooling_actions( $schedule_label = 'Schedule service', $call_label = 'Call Capehart' ) {
 	?>
-	<div class="ch-cooling-actions">
+	<div class="ch-cooling-actions" role="group" aria-label="Service contact options">
 		<a class="ch-cooling-button ch-cooling-button--primary ch-booking-trigger" href="<?php echo esc_url( home_url( '/book-appointment/' ) ); ?>" aria-haspopup="dialog">
-			<?php echo esc_html( $schedule_label ); ?>
+			<span class="ch-cooling-button__icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" focusable="false">
+					<path d="M7 3v3M17 3v3M4.5 9.5h15M6.5 5h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+					<path d="m9 15 2 2 4-5" />
+				</svg>
+			</span>
+			<span class="ch-cooling-button__copy">
+				<span class="ch-cooling-button__label"><?php echo esc_html( $schedule_label ); ?></span>
+				<span class="ch-cooling-button__meta">Open online booking</span>
+			</span>
+			<span class="ch-cooling-button__arrow" aria-hidden="true">&#8594;</span>
 		</a>
 		<a class="ch-cooling-button ch-cooling-button--secondary" href="tel:+19187711218">
-			<?php echo esc_html( $call_label ); ?>
+			<span class="ch-cooling-button__icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" focusable="false">
+					<path d="M8.2 4.2 10 8.4 7.8 9.8a15.3 15.3 0 0 0 6.4 6.4l1.4-2.2 4.2 1.8v2.7a1.5 1.5 0 0 1-1.5 1.5A14.3 14.3 0 0 1 4 5.7a1.5 1.5 0 0 1 1.5-1.5h2.7Z" />
+				</svg>
+			</span>
+			<span class="ch-cooling-button__copy">
+				<span class="ch-cooling-button__label"><?php echo esc_html( $call_label ); ?></span>
+				<span class="ch-cooling-button__meta">(918) 771-1218</span>
+			</span>
+			<span class="ch-cooling-button__arrow" aria-hidden="true">&#8594;</span>
 		</a>
 	</div>
 	<?php
@@ -379,7 +398,7 @@ function capehart_custom_render_cooling_child_hero( $slug, $page ) {
 				<p class="ch-cooling-hero__lead"><?php echo esc_html( $page['lead'] ); ?></p>
 				<?php
 				if ( 'emergency-ac-repair' === $slug ) {
-					capehart_custom_render_cooling_actions( 'Schedule cooling service', 'Call (918) 771-1218' );
+					capehart_custom_render_cooling_actions( 'Schedule cooling service' );
 				} else {
 					capehart_custom_render_cooling_actions();
 				}
@@ -544,10 +563,27 @@ function capehart_custom_render_cooling_maintenance() {
 	$faqs = capehart_custom_cooling_child_faqs( 'air-conditioning-maintenance' );
 	?>
 	<article class="ch-cooling-article ch-cooling-article--generated">
-		<section class="ch-cooling-intro-panel" aria-labelledby="maintenance-purpose-title">
-			<p class="ch-cooling-kicker">Seasonal service, clearly defined</p>
-			<h2 id="maintenance-purpose-title">What air conditioning maintenance is designed to do</h2>
-			<p>Maintenance gives you a structured look at a working cooling system before an active fault becomes the reason for the appointment. The focus is present condition, routine care, and useful information about anything that may deserve further attention.</p>
+		<section class="ch-cooling-intro-panel ch-cooling-intro-panel--media" aria-labelledby="maintenance-purpose-title">
+			<div class="ch-cooling-intro-panel__copy">
+				<p class="ch-cooling-kicker">Seasonal service, clearly defined</p>
+				<h2 id="maintenance-purpose-title">What air conditioning maintenance is designed to do</h2>
+				<p>Maintenance gives you a structured look at a working cooling system before an active fault becomes the reason for the appointment. The focus is present condition, routine care, and useful information about anything that may deserve further attention.</p>
+			</div>
+			<figure class="ch-cooling-feature-photo ch-cooling-feature-photo--maintenance">
+				<?php
+				echo wp_get_attachment_image(
+					2746,
+					'large',
+					false,
+					array(
+						'alt'      => 'HVAC technician inspecting an outdoor air conditioning unit',
+						'loading'  => 'lazy',
+						'decoding' => 'async',
+						'sizes'    => '(max-width: 760px) calc(100vw - 64px), 430px',
+					)
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core returns escaped image markup.
+				?>
+			</figure>
 		</section>
 
 		<section class="ch-cooling-section" aria-labelledby="maintenance-fit-title">
@@ -749,6 +785,21 @@ function capehart_custom_render_cooling_emergency() {
 				<article><h3>Ice or abnormal operation</h3><p>Visible freezing, new loud sounds, or unusual cycling can indicate a fault that requires diagnosis.</p></article>
 				<article><h3>Unsafe indoor heat</h3><p>Household health, age, and indoor conditions can make a cooling failure more urgent. Move vulnerable people to a safe environment when needed.</p></article>
 			</div>
+			<figure class="ch-cooling-feature-photo ch-cooling-feature-photo--diagnostic">
+				<?php
+				echo wp_get_attachment_image(
+					2761,
+					'large',
+					false,
+					array(
+						'alt'      => 'HVAC technician diagnosing an outdoor air conditioning unit',
+						'loading'  => 'lazy',
+						'decoding' => 'async',
+						'sizes'    => '(max-width: 1040px) calc(100vw - 40px), 1000px',
+					)
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core returns escaped image markup.
+				?>
+			</figure>
 		</section>
 
 		<section class="ch-cooling-section ch-cooling-safety-panel" aria-labelledby="emergency-safety-title">
@@ -796,7 +847,7 @@ function capehart_custom_render_cooling_emergency() {
 				<h2 id="emergency-cta-title">Call Capehart about an urgent cooling problem</h2>
 				<p>Use emergency services first for fire, visible smoke, or immediate danger. For urgent HVAC help, call Capehart and describe the address, symptoms, and safety concerns.</p>
 			</div>
-			<?php capehart_custom_render_cooling_actions( 'Schedule cooling service', 'Call (918) 771-1218' ); ?>
+			<?php capehart_custom_render_cooling_actions( 'Schedule cooling service' ); ?>
 		</section>
 	</article>
 	<?php
