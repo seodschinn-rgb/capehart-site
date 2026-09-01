@@ -2549,7 +2549,7 @@ html {
 
 @media (max-width: 620px) {
   html {
-    scroll-padding-top: 112px;
+    scroll-padding-top: 132px;
   }
 
   .ch-utility {
@@ -2580,14 +2580,20 @@ html {
 
   .ch-header-row,
   .ch-header-row.ch-shell {
-    width: min(calc(100% - 24px), var(--ch-container));
-    min-height: 74px;
+    width: min(calc(100% - 20px), var(--ch-container));
+    min-height: 92px;
   }
 
   .ch-header-row .wp-block-site-logo img {
-    width: 112px;
-    max-width: 112px;
-    max-height: 54px;
+    width: 150px;
+    max-width: 150px;
+    max-height: 72px;
+  }
+
+  .ch-header-row .wp-block-navigation__responsive-container-open {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
   }
 
   .ch-header-row .wp-block-navigation__responsive-close {
