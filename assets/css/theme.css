@@ -451,6 +451,10 @@ body.el-popup-parent--hidden .ch-floating-cta {
   transform: translate3d(0, 0.85rem, 0);
 }
 
+a.ch-booking-trigger.is-booking-pending {
+  cursor: progress;
+}
+
 .amelia-v2-booking.am-dialog-popup.am-forms-dialog.am-sbsNew {
   background: rgba(7, 22, 32, 0.78);
   backdrop-filter: blur(6px);

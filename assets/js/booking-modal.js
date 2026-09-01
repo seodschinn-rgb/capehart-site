@@ -11,6 +11,19 @@
   var opener = null;
   var wasOpen = document.body.classList.contains('el-popup-parent--hidden');
   var pointerStartedOutside = false;
+  var focusRestoreTimer = 0;
+  var pendingBookingLink = null;
+  var pendingBookingUrl = '';
+  var pendingBookingStartedAt = 0;
+  var pendingBookingTimer = 0;
+  var bookingReadyTimeout = 10000;
+  var bookingReadyPollInterval = 100;
+  var bookingBridge = window.capehartBookingBridge;
+  var earlyBookingRequest = bookingBridge && typeof bookingBridge.take === 'function'
+    ? bookingBridge.take()
+    : null;
+
+  window.capehartBookingBridge = null;
 
   function isVisible(element) {
     return Boolean(element && element.getClientRects().length);
@@ -51,6 +64,96 @@
       (link.target && link.target.toLowerCase() !== '_self');
   }
 
+  function getNativeTrigger() {
+    return document.querySelector(triggerSelector);
+  }
+
+  function isNativeTriggerReady(trigger) {
+    return Boolean(
+      trigger &&
+      trigger.style.pointerEvents !== 'none' &&
+      document.querySelector(mountedRootSelector)
+    );
+  }
+
+  function clearPendingBooking() {
+    if (pendingBookingTimer) {
+      window.clearTimeout(pendingBookingTimer);
+    }
+
+    if (pendingBookingLink && pendingBookingLink.isConnected) {
+      pendingBookingLink.removeAttribute('aria-busy');
+      pendingBookingLink.classList.remove('is-booking-pending');
+    }
+
+    pendingBookingLink = null;
+    pendingBookingUrl = '';
+    pendingBookingStartedAt = 0;
+    pendingBookingTimer = 0;
+  }
+
+  function clearFocusRestore() {
+    if (focusRestoreTimer) {
+      window.clearTimeout(focusRestoreTimer);
+      focusRestoreTimer = 0;
+    }
+  }
+
+  function openBookingDialog(link, trigger) {
+    clearFocusRestore();
+    clearPendingBooking();
+    opener = link;
+    trigger.click();
+  }
+
+  function continuePendingBooking() {
+    var link = pendingBookingLink;
+    var fallbackUrl = pendingBookingUrl;
+    var trigger;
+    var remaining;
+
+    if (!link || !fallbackUrl) {
+      clearPendingBooking();
+      return;
+    }
+
+    if (Date.now() - pendingBookingStartedAt >= bookingReadyTimeout) {
+      clearPendingBooking();
+      window.location.assign(fallbackUrl);
+      return;
+    }
+
+    trigger = getNativeTrigger();
+
+    if (isNativeTriggerReady(trigger)) {
+      openBookingDialog(link, trigger);
+      return;
+    }
+
+    remaining = bookingReadyTimeout - (Date.now() - pendingBookingStartedAt);
+
+    pendingBookingTimer = window.setTimeout(
+      continuePendingBooking,
+      Math.min(bookingReadyPollInterval, remaining)
+    );
+  }
+
+  function queueBookingDialog(link, fallbackUrl, startedAt) {
+    var requestStartedAt = pendingBookingStartedAt || startedAt || Date.now();
+
+    if (pendingBookingLink === link) {
+      return;
+    }
+
+    clearPendingBooking();
+    pendingBookingLink = link;
+    pendingBookingUrl = fallbackUrl || link.href;
+    pendingBookingStartedAt = requestStartedAt;
+    link.setAttribute('aria-busy', 'true');
+    link.classList.add('is-booking-pending');
+    continuePendingBooking();
+  }
+
   function closeDialog(root) {
     var closeButton = root && root.querySelector(closeSelector);
 
@@ -68,15 +171,15 @@
       return;
     }
 
-    trigger = document.querySelector(triggerSelector);
+    event.preventDefault();
+    trigger = getNativeTrigger();
 
-    if (!trigger || trigger.style.pointerEvents === 'none' || !document.querySelector(mountedRootSelector)) {
+    if (isNativeTriggerReady(trigger)) {
+      openBookingDialog(link, trigger);
       return;
     }
 
-    event.preventDefault();
-    opener = link;
-    trigger.click();
+    queueBookingDialog(link);
   });
 
   document.addEventListener('keydown', function (event) {
@@ -89,6 +192,11 @@
     root = getOpenDialogRoot();
 
     if (!root) {
+      if (pendingBookingLink) {
+        event.preventDefault();
+        clearPendingBooking();
+      }
+
       return;
     }
 
@@ -124,8 +232,11 @@
       focusTarget = opener;
       opener = null;
 
-      window.setTimeout(function () {
-        if (focusTarget.isConnected) {
+      clearFocusRestore();
+      focusRestoreTimer = window.setTimeout(function () {
+        focusRestoreTimer = 0;
+
+        if (!getOpenDialogRoot() && focusTarget.isConnected) {
           focusTarget.focus({ preventScroll: true });
         }
       }, 350);
@@ -136,4 +247,17 @@
     attributes: true,
     attributeFilter: ['class']
   });
+
+  window.addEventListener('pagehide', function () {
+    clearPendingBooking();
+    clearFocusRestore();
+  });
+
+  if (earlyBookingRequest && earlyBookingRequest.link && earlyBookingRequest.link.isConnected) {
+    queueBookingDialog(
+      earlyBookingRequest.link,
+      earlyBookingRequest.url,
+      earlyBookingRequest.startedAt
+    );
+  }
 })();

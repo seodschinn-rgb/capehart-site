@@ -108,6 +108,128 @@ function capehart_custom_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'capehart_custom_enqueue_assets' );
 
 /**
+ * Catch appointment clicks before the deferred modal controller is available.
+ *
+ * The small head bridge prevents a fast tap from following the fallback URL
+ * while Amelia's larger JavaScript bundle is still loading. The full modal
+ * controller takes over the pending request as soon as it executes.
+ */
+function capehart_custom_output_booking_click_bridge() {
+	if ( is_admin() || is_page( 'book-appointment' ) || ! shortcode_exists( 'ameliastepbooking' ) ) {
+		return;
+	}
+	?>
+	<script id="capehart-booking-click-bridge">
+	(function () {
+		'use strict';
+
+		var pending = null;
+		var fallbackTimer = 0;
+		var bookingPath = '/book-appointment';
+
+		function clearPending() {
+			if (fallbackTimer) {
+				window.clearTimeout(fallbackTimer);
+			}
+
+			if (pending && pending.link && pending.link.isConnected) {
+				pending.link.removeAttribute('aria-busy');
+				pending.link.classList.remove('is-booking-pending');
+			}
+
+			pending = null;
+			fallbackTimer = 0;
+		}
+
+		function isBookingLink(link) {
+			var url;
+
+			try {
+				url = new URL(link.href, window.location.href);
+			} catch (error) {
+				return false;
+			}
+
+			return url.origin === window.location.origin &&
+				url.pathname.replace(/\/+$/, '') === bookingPath;
+		}
+
+		function shouldPreserveNavigation(event, link) {
+			return event.defaultPrevented ||
+				event.button !== 0 ||
+				event.metaKey ||
+				event.ctrlKey ||
+				event.shiftKey ||
+				event.altKey ||
+				link.hasAttribute('download') ||
+				(link.target && link.target.toLowerCase() !== '_self');
+		}
+
+		function interceptClick(event) {
+			var target = event.target instanceof Element ? event.target : null;
+			var link = target ? target.closest('a.ch-booking-trigger[href]') : null;
+			var fallbackUrl;
+
+			if (!link || !isBookingLink(link) || shouldPreserveNavigation(event, link)) {
+				return;
+			}
+
+			event.preventDefault();
+
+			if (pending) {
+				return;
+			}
+
+			fallbackUrl = link.href;
+			pending = {
+				link: link,
+				url: fallbackUrl,
+				startedAt: Date.now()
+			};
+			link.setAttribute('aria-busy', 'true');
+			link.classList.add('is-booking-pending');
+			fallbackTimer = window.setTimeout(function () {
+				clearPending();
+				window.location.assign(fallbackUrl);
+			}, 10000);
+		}
+
+		function cancelPendingOnEscape(event) {
+			if (event.key !== 'Escape' || event.defaultPrevented || !pending) {
+				return;
+			}
+
+			event.preventDefault();
+			clearPending();
+		}
+
+		document.addEventListener('click', interceptClick, true);
+		document.addEventListener('keydown', cancelPendingOnEscape, true);
+		window.capehartBookingBridge = {
+			take: function () {
+				var request = pending;
+
+				document.removeEventListener('click', interceptClick, true);
+				document.removeEventListener('keydown', cancelPendingOnEscape, true);
+				if (fallbackTimer) {
+					window.clearTimeout(fallbackTimer);
+				}
+				pending = null;
+				fallbackTimer = 0;
+
+				return request;
+			},
+			cancel: clearPending
+		};
+
+		window.addEventListener('pagehide', clearPending);
+	})();
+	</script>
+	<?php
+}
+add_action( 'wp_head', 'capehart_custom_output_booking_click_bridge', 1 );
+
+/**
  * Build Amelia's native dialog for the global booking triggers.
  *
  * The standalone appointment page keeps its own form as a no-JavaScript
