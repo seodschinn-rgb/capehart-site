@@ -55,10 +55,6 @@
   text-wrap: pretty;
 }
 
-.ch-contact-page a {
-  color: inherit;
-}
-
 .ch-contact-page a:focus-visible,
 .ch-contact-page summary:focus-visible {
   outline: 3px solid #f7b62d;
