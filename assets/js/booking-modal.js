@@ -21,6 +21,9 @@
   var mobileBookingMedia = window.matchMedia('(max-width: 768px)');
   var serviceSelectFieldSelector = '.am-service-select';
   var serviceSelectInputSelector = '.am-adv-select input.el-input__inner';
+  var responsiveMenuSelector = '.wp-block-navigation__responsive-container.is-menu-open';
+  var responsiveMenuCloseSelector = '.wp-block-navigation__responsive-container-close';
+  var responsiveMenuOpenSelector = '.ch-header-row .wp-block-navigation__responsive-container-open';
   var bookingBridge = window.capehartBookingBridge;
   var earlyBookingRequest = bookingBridge && typeof bookingBridge.take === 'function'
     ? bookingBridge.take()
@@ -151,10 +154,37 @@
     configureNonTypingServiceField(field);
   }
 
+  function closeResponsiveMenu(link) {
+    var menu = link ? link.closest(responsiveMenuSelector) : null;
+    var closeButton = menu ? menu.querySelector(responsiveMenuCloseSelector) : null;
+
+    if (!closeButton) {
+      return false;
+    }
+
+    closeButton.click();
+    return true;
+  }
+
   function openBookingDialog(link, trigger) {
+    var closedResponsiveMenu;
+
     clearFocusRestore();
     clearPendingBooking();
-    opener = link;
+    closedResponsiveMenu = closeResponsiveMenu(link);
+    opener = closedResponsiveMenu
+      ? document.querySelector(responsiveMenuOpenSelector) || link
+      : link;
+
+    if (closedResponsiveMenu) {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          trigger.click();
+        });
+      });
+      return;
+    }
+
     trigger.click();
   }
 
