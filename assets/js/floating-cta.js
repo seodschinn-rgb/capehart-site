@@ -11,6 +11,8 @@
 	var scrollReferenceY = Math.max( window.scrollY, 0 );
 	var scrollHidden = false;
 	var footerVisible = false;
+	var aboutHero = document.querySelector( '.ch-about-hero' );
+	var aboutHeroVisible = false;
 	var ticking = false;
 	var activeHiddenState = false;
 	var topThreshold = 72;
@@ -38,7 +40,7 @@
 	}
 
 	function applyVisibility() {
-		var shouldHide = scrollHidden || footerVisible;
+		var shouldHide = scrollHidden || footerVisible || aboutHeroVisible;
 
 		if ( shouldHide && floatingCta.matches( ':focus-within' ) ) {
 			return;
@@ -54,9 +56,23 @@
 		setInteractiveState( shouldHide );
 	}
 
+	function updateAboutHeroVisibility() {
+		var bounds;
+
+		if ( ! aboutHero ) {
+			aboutHeroVisible = false;
+			return;
+		}
+
+		bounds = aboutHero.getBoundingClientRect();
+		aboutHeroVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+	}
+
 	function updateFromScroll() {
 		var currentScrollY = Math.max( window.scrollY, 0 );
 		var delta = currentScrollY - scrollReferenceY;
+
+		updateAboutHeroVisibility();
 
 		if ( currentScrollY <= topThreshold ) {
 			scrollHidden = false;
@@ -107,4 +123,7 @@
 
 		footerObserver.observe( footer );
 	}
+
+	updateAboutHeroVisibility();
+	applyVisibility();
 }() );
