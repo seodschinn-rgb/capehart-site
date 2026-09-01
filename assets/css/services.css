@@ -30,6 +30,10 @@
   display: none;
 }
 
+.ch-services-page p:empty {
+  display: none;
+}
+
 .ch-services-page :where(img, svg, video, iframe) {
   max-width: 100%;
 }
@@ -81,7 +85,7 @@
   font-size: clamp(2.05rem, 4vw, 3.45rem);
 }
 
-.ch-services-heading > p:last-child:not(.ch-services-kicker) {
+.ch-services-heading > p:not(.ch-services-kicker) {
   max-width: 730px;
   margin: 1rem 0 0;
   color: var(--ch-muted);
@@ -738,7 +742,7 @@
   color: #a9deff;
 }
 
-.ch-services-heading--light > p:last-child:not(.ch-services-kicker) {
+.ch-services-heading--light > p:not(.ch-services-kicker) {
   color: #c7dce5;
 }
 
