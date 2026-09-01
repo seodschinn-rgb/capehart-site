@@ -208,6 +208,11 @@
   transform: translateY(-2px);
 }
 
+/* WordPress can add line-break elements around shortcode-generated markup. */
+.ch-cooling-button br {
+  display: none;
+}
+
 .ch-cooling-button:focus-visible {
   outline: 3px solid #a9deff;
   outline-offset: 3px;
