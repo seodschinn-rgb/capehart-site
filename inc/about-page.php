@@ -23,23 +23,53 @@ function capehart_custom_about_page_data() {
 }
 
 /**
- * Return the two named team members already shown on the live company site.
+ * Return the two named team members and their confirmed public profiles.
  *
- * Roles and credentials are intentionally omitted until independently verified.
- *
- * @return array<int, array<string, string>>
+ * @return array<int, array<string, mixed>>
  */
 function capehart_custom_about_team_members() {
 	return array(
 		array(
-			'id'    => 'bailey-capehart',
-			'name'  => 'Bailey Capehart',
-			'image' => 'https://capeharthc.com/wp-content/uploads/2026/04/IMG_5474.webp',
+			'id'        => 'bailey-capehart',
+			'name'      => 'Bailey Capehart',
+			'role'      => 'CEO',
+			'job_title' => 'Chief Executive Officer',
+			'image'     => 'https://capeharthc.com/wp-content/uploads/2026/04/IMG_5474.webp',
+			'socials'   => array(
+				array(
+					'platform' => 'Facebook',
+					'url'      => 'https://www.facebook.com/bailey.capehart.2025/',
+				),
+				array(
+					'platform' => 'Instagram',
+					'url'      => 'https://www.instagram.com/capehart50',
+				),
+				array(
+					'platform' => 'TikTok',
+					'url'      => 'https://www.tiktok.com/@baileycapehart',
+				),
+			),
 		),
 		array(
-			'id'    => 'brock-capehart',
-			'name'  => 'Brock Capehart',
-			'image' => 'https://capeharthc.com/wp-content/uploads/2026/04/IMG_5475.webp',
+			'id'        => 'brock-capehart',
+			'name'      => 'Brock Capehart',
+			'role'      => 'Vice President',
+			'job_title' => 'Vice President',
+			'image'     => 'https://capeharthc.com/wp-content/uploads/2026/04/IMG_5475.webp',
+			'socials'   => array(
+				array(
+					'platform' => 'Facebook',
+					'url'      => 'https://www.facebook.com/brock.capehart.96/',
+				),
+				array(
+					'platform' => 'Instagram',
+					'url'      => 'https://www.instagram.com/brockcapehart_',
+				),
+				array(
+					'platform' => 'TikTok',
+					'url'      => 'https://www.tiktok.com/@bcapehart40',
+				),
+			),
 		),
 	);
 }
@@ -53,7 +83,7 @@ function capehart_custom_about_faqs() {
 	return array(
 		array(
 			'question' => 'Who is featured on the Capehart team page?',
-			'answer'   => 'Bailey Capehart and Brock Capehart are the two named team members featured by Capehart Heating & Cooling. Their real team and profile photos are shown on this page.',
+			'answer'   => 'Bailey Capehart, CEO, and Brock Capehart, Vice President, are the two named team members featured by Capehart Heating & Cooling. Their real team photos and public social profiles are shown on this page.',
 		),
 		array(
 			'question' => 'What does Kiefer-based mean for Capehart?',
@@ -157,7 +187,7 @@ function capehart_custom_render_about_page() {
 			<div class="ch-about-shell">
 				<div class="ch-about-heading ch-about-heading--split">
 					<div><p class="ch-about-kicker">The people behind the name</p><h2 id="about-team-title">Meet Bailey and Brock Capehart</h2></div>
-					<p>Bailey and Brock Capehart are the people behind Capehart Heating &amp; Cooling. Their real team and profile photos give homeowners a clear view of the Kiefer-based company they are contacting.</p>
+					<p>Bailey Capehart leads the company as CEO, and Brock Capehart serves as Vice President. Their real team photos and public profiles give homeowners a clear view of the Kiefer-based company they are contacting.</p>
 				</div>
 				<div class="ch-about-team__grid">
 					<?php foreach ( $members as $member ) : ?>
@@ -168,7 +198,12 @@ function capehart_custom_render_about_page() {
 							<div class="ch-about-profile__copy">
 								<span>Capehart Heating &amp; Cooling</span>
 								<h3><?php echo esc_html( $member['name'] ); ?></h3>
-								<p>Capehart Heating &amp; Cooling team member</p>
+								<p class="ch-about-profile__role"><?php echo esc_html( $member['role'] ); ?></p>
+								<ul class="ch-about-profile__socials" aria-label="<?php echo esc_attr( $member['name'] . ' social profiles' ); ?>">
+									<?php foreach ( $member['socials'] as $social ) : ?>
+										<li><a href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $member['name'] . ' on ' . $social['platform'] . ' (opens in a new tab)' ); ?>"><?php echo esc_html( $social['platform'] ); ?></a></li>
+									<?php endforeach; ?>
+								</ul>
 							</div>
 						</article>
 					<?php endforeach; ?>
@@ -473,6 +508,16 @@ function capehart_custom_about_team_schema() {
 	$list_items  = array();
 
 	foreach ( capehart_custom_about_team_members() as $index => $member ) {
+		$same_as = array();
+
+		foreach ( $member['socials'] as $social ) {
+			$social_url = esc_url_raw( $social['url'] );
+
+			if ( $social_url ) {
+				$same_as[] = $social_url;
+			}
+		}
+
 		$list_items[] = array(
 			'@type'    => 'ListItem',
 			'position' => $index + 1,
@@ -480,8 +525,11 @@ function capehart_custom_about_team_schema() {
 				'@type'       => 'Person',
 				'@id'         => $page_url . '#' . $member['id'],
 				'name'        => $member['name'],
+				'jobTitle'    => $member['job_title'],
 				'image'       => $member['image'],
-				'description' => 'Capehart Heating & Cooling team member',
+				'url'         => $page_url . '#' . $member['id'],
+				'description' => $member['job_title'] . ' at Capehart Heating & Cooling',
+				'sameAs'      => $same_as,
 				'worksFor'    => array( '@id' => $company_id ),
 			),
 		);

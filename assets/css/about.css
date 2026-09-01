@@ -541,6 +541,58 @@
   line-height: 1.66;
 }
 
+.ch-about-profile .ch-about-profile__role {
+  margin-top: 0.42rem;
+  color: var(--ch-ink);
+  font-weight: 800;
+}
+
+.ch-about-profile__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-about-profile__socials li {
+  margin: 0;
+}
+
+.ch-about-profile__socials a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.52rem 0.72rem;
+  color: var(--ch-blue-dark);
+  background: var(--ch-blue-soft);
+  border: 1px solid #c9e7f3;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    color 170ms ease,
+    background-color 170ms ease,
+    border-color 170ms ease,
+    transform 170ms ease;
+}
+
+.ch-about-profile__socials a:hover {
+  color: var(--ch-white);
+  background: var(--ch-blue-dark);
+  border-color: var(--ch-blue-dark);
+  transform: translateY(-1px);
+}
+
+.ch-about-profile__socials a:focus-visible {
+  outline: 3px solid var(--ch-blue-dark);
+  outline-offset: 2px;
+}
+
 /* Verification */
 .ch-about-verify {
   background: var(--ch-white);
