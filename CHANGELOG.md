@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Rebuilt the Heating hub, furnace repair, furnace maintenance, and furnace replacement pages with dedicated responsive templates
+- Added distinct Heating search metadata, Service schema, hub FAQ schema, social images, and intent-focused internal linking
+- Reused the Cooling service layout system with a scoped warm Heating visual layer and removed the legacy page-title/body presentation from rendered pages
+- Prevented WordPress core from duplicating Yoast's document title when Yoast SEO is active
+
 ## 1.0.0 — 2026-08-31
 
 - Initial standalone Capehart block theme

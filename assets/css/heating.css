@@ -1,0 +1,180 @@
+/*
+ * Capehart Heating cluster
+ *
+ * Loaded after the shared Cooling service-layout primitives. These scoped
+ * overrides give Heating a coordinated warm accent without duplicating the
+ * responsive layout system.
+ */
+
+.ch-heating-page-layout {
+  --ch-heating-accent: #b71c24;
+  --ch-heating-accent-dark: #8e1219;
+  --ch-heating-soft: #fff3f1;
+  --ch-heating-line: #efd2d3;
+}
+
+.ch-heating-page .ch-cooling-hero {
+  background:
+    radial-gradient(
+      circle at 82% 12%,
+      rgba(201, 31, 39, 0.31),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 8% 105%,
+      rgba(238, 133, 58, 0.14),
+      transparent 34%
+    ),
+    linear-gradient(132deg, #111d25 0%, #193442 56%, #452126 100%);
+}
+
+.ch-heating-page .ch-cooling-hero::before,
+.ch-heating-page .ch-cooling-hero::after {
+  border-color: rgba(255, 202, 198, 0.15);
+}
+
+.ch-heating-page .ch-cooling-hero .ch-cooling-kicker,
+.ch-heating-page .ch-cooling-area .ch-cooling-kicker,
+.ch-heating-page .ch-cooling-final-cta .ch-cooling-kicker,
+.ch-heating-page .ch-cooling-safety-panel .ch-cooling-kicker {
+  color: #ffc8c3;
+}
+
+.ch-heating-page .ch-cooling-button:focus-visible {
+  outline-color: #ffc8c3;
+}
+
+.ch-heating-page .ch-cooling-snapshot .ch-cooling-snapshot__eyebrow,
+.ch-heating-page .ch-cooling-section__intro .ch-cooling-kicker,
+.ch-heating-page .ch-cooling-kicker,
+.ch-heating-page .ch-cooling-decision__label {
+  color: var(--ch-heating-accent-dark);
+}
+
+.ch-heating-page .ch-cooling-snapshot li::before {
+  background: var(--ch-heating-accent);
+  border-color: #f8d8d7;
+}
+
+.ch-heating-page .ch-cooling-snapshot--hub li > span,
+.ch-heating-page .ch-cooling-route-card__number,
+.ch-heating-page .ch-cooling-steps > ol > li > span {
+  color: var(--ch-heating-accent-dark) !important;
+  background: var(--ch-heating-soft);
+}
+
+.ch-heating-page .ch-cooling-subnav a:hover,
+.ch-heating-page .ch-cooling-subnav a:focus-visible,
+.ch-heating-page .ch-cooling-subnav a[aria-current="page"] {
+  color: var(--ch-heating-accent-dark);
+  background: var(--ch-heating-soft);
+}
+
+.ch-heating-page .ch-cooling-card::before,
+.ch-heating-page .ch-cooling-route-card::before,
+.ch-heating-page .ch-cooling-intro-panel::before {
+  background: linear-gradient(
+    90deg,
+    var(--ch-heating-accent-dark),
+    #e45143
+  );
+}
+
+.ch-heating-page .ch-cooling-route-card:hover,
+.ch-heating-page .ch-cooling-route-card:focus-within,
+.ch-heating-page .ch-cooling-card:hover,
+.ch-heating-page .ch-cooling-card:focus-within {
+  border-color: #e4b6b7;
+}
+
+.ch-heating-page .ch-cooling-route-card--repair {
+  background: linear-gradient(145deg, var(--ch-white), #fff7f5);
+  border-color: #ebc7c5;
+}
+
+.ch-heating-page :where(.ch-cooling-text-link, .ch-cooling-route-card__links a),
+.ch-heating-page .ch-cooling-article a {
+  color: var(--ch-heating-accent-dark);
+}
+
+.ch-heating-page .ch-cooling-decision__grid > *:nth-child(even),
+.ch-heating-page .ch-cooling-comparison > article:nth-child(even) {
+  background: linear-gradient(145deg, #fffafa, var(--ch-heating-soft));
+  border-color: var(--ch-heating-line);
+}
+
+.ch-heating-page .ch-cooling-intro-panel {
+  background: linear-gradient(145deg, #fffafa 0%, var(--ch-heating-soft) 100%);
+  border-color: var(--ch-heating-line);
+}
+
+.ch-heating-page .ch-cooling-feature-grid > article::before {
+  background: var(--ch-heating-accent-dark);
+}
+
+.ch-heating-page .ch-cooling-info-band {
+  background: var(--ch-heating-soft);
+  border-color: var(--ch-heating-line);
+}
+
+.ch-heating-page .ch-cooling-safety-panel {
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(229, 78, 67, 0.26),
+      transparent 32%
+    ),
+    linear-gradient(135deg, var(--ch-ink), #432129);
+}
+
+.ch-heating-page .ch-cooling-local-note {
+  border-left-color: var(--ch-heating-accent-dark);
+}
+
+.ch-heating-page .ch-cooling-area {
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(201, 31, 39, 0.3),
+      transparent 29%
+    ),
+    linear-gradient(135deg, var(--ch-ink), #283e48);
+}
+
+.ch-heating-page .ch-cooling-faq details[open] summary {
+  color: var(--ch-heating-accent-dark);
+  background: #fff8f7;
+}
+
+.ch-heating-page .ch-cooling-final-cta {
+  background:
+    radial-gradient(
+      circle at 86% 45%,
+      rgba(201, 31, 39, 0.34),
+      transparent 30%
+    ),
+    linear-gradient(135deg, var(--ch-ink), #35242a);
+}
+
+.ch-heating-page .ch-cooling-final-cta::after {
+  border-color: rgba(232, 105, 92, 0.18);
+}
+
+.ch-heating-page .ch-cooling-feature-photo {
+  background: #eadfda;
+  border-color: rgba(142, 18, 25, 0.16);
+}
+
+.ch-heating-page .ch-cooling-feature-photo img {
+  object-position: center;
+}
+
+.ch-heating-router__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 760px) {
+  .ch-heating-router__grid {
+    grid-template-columns: 1fr;
+  }
+}

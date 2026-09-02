@@ -12,12 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'CAPEHART_CUSTOM_VERSION', '1.0.0' );
 
 $capehart_cooling_pages_file = __DIR__ . '/inc/cooling-pages.php';
+$capehart_heating_pages_file = __DIR__ . '/inc/heating-pages.php';
 $capehart_services_page_file = __DIR__ . '/inc/services-page.php';
 $capehart_about_page_file    = __DIR__ . '/inc/about-page.php';
 $capehart_contact_page_file  = __DIR__ . '/inc/contact-page.php';
 
 if ( is_readable( $capehart_cooling_pages_file ) ) {
 	require_once $capehart_cooling_pages_file;
+}
+
+if ( is_readable( $capehart_heating_pages_file ) ) {
+	require_once $capehart_heating_pages_file;
 }
 
 if ( is_readable( $capehart_services_page_file ) ) {
@@ -84,6 +89,20 @@ function capehart_custom_setup() {
 add_action( 'after_setup_theme', 'capehart_custom_setup' );
 
 /**
+ * Keep Yoast as the single document-title source when it is active.
+ *
+ * WordPress core's title renderer and Yoast were both printing the same title
+ * on every public URL. Removing only the core callback preserves the native
+ * fallback whenever Yoast is unavailable.
+ */
+function capehart_custom_prevent_duplicate_document_title() {
+	if ( defined( 'WPSEO_VERSION' ) ) {
+		remove_action( 'wp_head', '_wp_render_title_tag', 1 );
+	}
+}
+add_action( 'wp', 'capehart_custom_prevent_duplicate_document_title', 0 );
+
+/**
  * Load the dependency-free front-end theme assets.
  */
 function capehart_custom_enqueue_assets() {
@@ -108,6 +127,10 @@ function capehart_custom_enqueue_assets() {
 				'ac-installation-tulsa-ok',
 				'air-conditioning-replacement',
 				'emergency-ac-repair',
+				'heating',
+				'furnace-repair',
+				'furnace-maintenance',
+				'furnace-replacement',
 			)
 		)
 		&& is_readable( $cooling_stylesheet )
@@ -117,6 +140,27 @@ function capehart_custom_enqueue_assets() {
 			get_theme_file_uri( 'assets/css/cooling.css' ),
 			array( 'capehart-custom' ),
 			(string) filemtime( $cooling_stylesheet )
+		);
+	}
+
+	$heating_stylesheet = get_theme_file_path( 'assets/css/heating.css' );
+
+	if (
+		is_page(
+			array(
+				'heating',
+				'furnace-repair',
+				'furnace-maintenance',
+				'furnace-replacement',
+			)
+		)
+		&& is_readable( $heating_stylesheet )
+	) {
+		wp_enqueue_style(
+			'capehart-heating-pages',
+			get_theme_file_uri( 'assets/css/heating.css' ),
+			array( 'capehart-cooling-pages' ),
+			(string) filemtime( $heating_stylesheet )
 		);
 	}
 

@@ -1,8 +1,8 @@
 /*
- * Capehart cooling cluster
+ * Capehart service-page layout system
  *
- * Loaded only on the cooling hub and its six service pages. All rules remain
- * scoped so the broader theme and the published heating content are untouched.
+ * Loaded on the Cooling cluster and as a shared layout dependency for the
+ * Heating cluster. All rules remain scoped so the broader theme is untouched.
  */
 
 .ch-cooling-page-layout {
