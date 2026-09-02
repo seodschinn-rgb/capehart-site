@@ -91,16 +91,18 @@ add_action( 'after_setup_theme', 'capehart_custom_setup' );
 /**
  * Keep Yoast as the single document-title source when it is active.
  *
- * WordPress core's title renderer and Yoast were both printing the same title
- * on every public URL. Removing only the core callback preserves the native
- * fallback whenever Yoast is unavailable.
+ * WordPress core's classic and block-template title renderers can both be
+ * registered after the theme is loaded. Removing them at the start of
+ * wp_head keeps Yoast as the only title source while preserving WordPress'
+ * native fallback whenever Yoast is unavailable.
  */
 function capehart_custom_prevent_duplicate_document_title() {
 	if ( defined( 'WPSEO_VERSION' ) ) {
 		remove_action( 'wp_head', '_wp_render_title_tag', 1 );
+		remove_action( 'wp_head', '_block_template_render_title_tag', 1 );
 	}
 }
-add_action( 'wp', 'capehart_custom_prevent_duplicate_document_title', 0 );
+add_action( 'wp_head', 'capehart_custom_prevent_duplicate_document_title', 0 );
 
 /**
  * Load the dependency-free front-end theme assets.
