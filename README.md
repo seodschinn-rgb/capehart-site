@@ -42,6 +42,8 @@ The theme deliberately does not create review counts, response-time promises, li
 
 Single posts follow Capehart's existing article-body convention: the article content owns its lead/hero image, while the featured image is used for archive cards and social/SEO metadata. Do not insert the same image twice at the start of a post.
 
+The Guides selector uses a curated set of standard WordPress categories. Assign posts to `cooling-guides`, `heating-guides`, `airflow-indoor-air-quality`, `maintenance-guides`, or `dryer-vent-guides`; a post may belong to more than one topic. The selector hides categories that do not yet contain a published guide.
+
 ## Rollback
 
 If staging exposes a compatibility problem, reactivate Astra. Content and SEO data remain in WordPress; this theme does not delete or rewrite them.

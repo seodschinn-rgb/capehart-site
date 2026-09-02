@@ -16,6 +16,12 @@
 
 	<!-- wp:group {"align":"full","className":"ch-archive-section","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|80"}}},"layout":{"type":"constrained"}} -->
 	<div class="wp-block-group alignfull ch-archive-section" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--80)">
+		<!-- wp:group {"align":"wide","className":"ch-guide-filter-wrap","layout":{"type":"default"}} -->
+		<div class="wp-block-group alignwide ch-guide-filter-wrap">
+			<!-- wp:shortcode -->[capehart_guide_categories]<!-- /wp:shortcode -->
+		</div>
+		<!-- /wp:group -->
+
 		<!-- wp:query {"queryId":2,"query":{"perPage":9,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"exclude","inherit":true},"align":"wide","className":"ch-post-query"} -->
 		<div class="wp-block-query alignwide ch-post-query">
 			<!-- wp:post-template {"className":"ch-post-grid","layout":{"type":"grid","columnCount":3}} -->

@@ -7,6 +7,8 @@
 - Reused the Cooling service layout system with a scoped warm Heating visual layer and removed the legacy page-title/body presentation from rendered pages
 - Prevented WordPress core from duplicating Yoast's document title when Yoast SEO is active
 - Corrected Heating safety-panel and conversion-button contrast and improved the desktop final-CTA proportions
+- Added a responsive Guides category selector with article counts, active states, native category archives, and a legacy Cooling-category redirect
+- Organized the Guides taxonomy around Cooling, Heating, Airflow & Indoor Air Quality, Maintenance, and Dryer Vent
 
 ## 1.0.0 — 2026-08-31
 

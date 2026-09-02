@@ -583,6 +583,143 @@ function capehart_custom_excerpt_more( $more ) {
 add_filter( 'excerpt_more', 'capehart_custom_excerpt_more' );
 
 /**
+ * Render the curated guide-category navigation used above the blog archive.
+ *
+ * Only categories that exist and contain published posts are exposed. The
+ * fixed order keeps the filter predictable even when other categories are
+ * added in WordPress.
+ *
+ * @return string Accessible desktop and mobile category navigation.
+ */
+function capehart_custom_guide_categories_shortcode() {
+	$category_labels = array(
+		'cooling-guides'             => __( 'Cooling', 'capehart-custom' ),
+		'heating-guides'             => __( 'Heating', 'capehart-custom' ),
+		'airflow-indoor-air-quality' => __( 'Airflow & Indoor Air Quality', 'capehart-custom' ),
+		'maintenance-guides'         => __( 'Maintenance', 'capehart-custom' ),
+		'dryer-vent-guides'          => __( 'Dryer Vent', 'capehart-custom' ),
+	);
+	$post_counts     = wp_count_posts( 'post' );
+	$all_count       = isset( $post_counts->publish ) ? (int) $post_counts->publish : 0;
+	$items           = array(
+		array(
+			'label'  => __( 'All Guides', 'capehart-custom' ),
+			'url'    => home_url( '/blog/' ),
+			'count'  => $all_count,
+			'active' => is_home(),
+		),
+	);
+
+	foreach ( $category_labels as $slug => $label ) {
+		$category = get_category_by_slug( $slug );
+
+		if ( ! $category instanceof WP_Term || $category->count < 1 ) {
+			continue;
+		}
+
+		$category_url = get_category_link( $category );
+
+		if ( is_wp_error( $category_url ) ) {
+			continue;
+		}
+
+		$items[] = array(
+			'label'  => $label,
+			'url'    => $category_url,
+			'count'  => (int) $category->count,
+			'active' => is_category( $category->term_id ),
+		);
+	}
+
+	$current_label = __( 'Choose a guide category', 'capehart-custom' );
+	$current_count = null;
+
+	foreach ( $items as $item ) {
+		if ( $item['active'] ) {
+			$current_label = $item['label'];
+			$current_count = $item['count'];
+			break;
+		}
+	}
+
+	$render_links = static function ( $links ) {
+		$markup = '';
+
+		foreach ( $links as $link ) {
+			$classes = 'ch-guide-filter__link';
+			$current = '';
+
+			if ( $link['active'] ) {
+				$classes .= ' is-active';
+				$current  = ' aria-current="page"';
+			}
+
+			$accessible_label = sprintf(
+				/* translators: 1: guide category name, 2: number of published guides. */
+				_n( '%1$s, %2$d guide', '%1$s, %2$d guides', $link['count'], 'capehart-custom' ),
+				$link['label'],
+				$link['count']
+			);
+
+			$markup .= sprintf(
+				'<a class="%1$s" href="%2$s" aria-label="%3$s"%4$s><span>%5$s</span><span class="ch-guide-filter__count" aria-hidden="true">%6$d</span></a>',
+				esc_attr( $classes ),
+				esc_url( $link['url'] ),
+				esc_attr( $accessible_label ),
+				$current, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Constant attribute or empty string.
+				esc_html( $link['label'] ),
+				absint( $link['count'] )
+			);
+		}
+
+		return $markup;
+	};
+
+	$summary_count = null !== $current_count
+		? sprintf(
+			'<span class="ch-guide-filter__count" aria-hidden="true">%d</span>',
+			absint( $current_count )
+		)
+		: '';
+
+	return sprintf(
+		'<div class="ch-guide-filter"><nav class="ch-guide-filter__desktop" aria-label="%1$s">%2$s</nav><details class="ch-guide-filter__mobile"><summary><span class="ch-guide-filter__summary-label"><span class="ch-guide-filter__summary-kicker">%3$s</span><span class="ch-guide-filter__summary-current">%4$s %5$s</span></span><span class="ch-guide-filter__chevron" aria-hidden="true"></span></summary><nav class="ch-guide-filter__mobile-links" aria-label="%6$s">%2$s</nav></details></div>',
+		esc_attr__( 'Filter guides by category', 'capehart-custom' ),
+		$render_links( $items ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every dynamic value is escaped in the renderer.
+		esc_html__( 'Browse guides', 'capehart-custom' ),
+		esc_html( $current_label ),
+		$summary_count, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Integer-only generated markup.
+		esc_attr__( 'Filter guides by category on mobile', 'capehart-custom' )
+	);
+}
+add_shortcode( 'capehart_guide_categories', 'capehart_custom_guide_categories_shortcode' );
+
+/**
+ * Redirect the misspelled legacy cooling category to its canonical archive.
+ */
+function capehart_custom_redirect_legacy_cooling_category() {
+	if ( ! is_category( 'air-condititioning-blogs' ) ) {
+		return;
+	}
+
+	$cooling_category = get_category_by_slug( 'cooling-guides' );
+
+	if ( ! $cooling_category instanceof WP_Term ) {
+		return;
+	}
+
+	$target_url = get_category_link( $cooling_category );
+
+	if ( is_wp_error( $target_url ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $target_url, 301, 'Capehart Custom' );
+	exit;
+}
+add_action( 'template_redirect', 'capehart_custom_redirect_legacy_cooling_category' );
+
+/**
  * Add a stable namespace hook without depending on a page builder.
  *
  * @param string[] $classes Body classes.
