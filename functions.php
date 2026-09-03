@@ -14,6 +14,7 @@ define( 'CAPEHART_CUSTOM_VERSION', '1.0.0' );
 $capehart_cooling_pages_file = __DIR__ . '/inc/cooling-pages.php';
 $capehart_heating_pages_file = __DIR__ . '/inc/heating-pages.php';
 $capehart_services_page_file = __DIR__ . '/inc/services-page.php';
+$capehart_dryer_page_file   = __DIR__ . '/inc/dryer-vent-page.php';
 $capehart_about_page_file    = __DIR__ . '/inc/about-page.php';
 $capehart_contact_page_file  = __DIR__ . '/inc/contact-page.php';
 
@@ -27,6 +28,10 @@ if ( is_readable( $capehart_heating_pages_file ) ) {
 
 if ( is_readable( $capehart_services_page_file ) ) {
 	require_once $capehart_services_page_file;
+}
+
+if ( is_readable( $capehart_dryer_page_file ) ) {
+	require_once $capehart_dryer_page_file;
 }
 
 if ( is_readable( $capehart_about_page_file ) ) {
@@ -174,6 +179,17 @@ function capehart_custom_enqueue_assets() {
 			get_theme_file_uri( 'assets/css/services.css' ),
 			array( 'capehart-custom' ),
 			(string) filemtime( $services_stylesheet )
+		);
+	}
+
+	$dryer_stylesheet = get_theme_file_path( 'assets/css/dryer-vent.css' );
+
+	if ( is_page( 'dryer-vent-cleaning-tulsa' ) && is_readable( $dryer_stylesheet ) ) {
+		wp_enqueue_style(
+			'capehart-dryer-vent-page',
+			get_theme_file_uri( 'assets/css/dryer-vent.css' ),
+			array( 'capehart-custom' ),
+			(string) filemtime( $dryer_stylesheet )
 		);
 	}
 
@@ -406,9 +422,15 @@ function capehart_custom_booking_modal_shortcode() {
 		'furnace-replacement'           => 2,
 		'dryer-vent-cleaning-tulsa'     => 3,
 	);
+	$service_by_page = array(
+		'dryer-vent-cleaning-tulsa' => 8,
+	);
 
 	$category_id = isset( $category_by_page[ $page_slug ] )
 		? (int) $category_by_page[ $page_slug ]
+		: 0;
+	$service_id = isset( $service_by_page[ $page_slug ] )
+		? (int) $service_by_page[ $page_slug ]
 		: 0;
 
 	if ( ! $category_id && 0 === strpos( $page_slug, 'air-conditioning-' ) ) {
@@ -420,9 +442,13 @@ function capehart_custom_booking_modal_shortcode() {
 	}
 
 	$shortcode_attributes = 'trigger=ch-amelia-native-trigger trigger_type=id in_dialog=1';
-	$shortcode            = $category_id
-		? sprintf( '[ameliastepbooking %s category=%d]', $shortcode_attributes, $category_id )
-		: sprintf( '[ameliastepbooking %s]', $shortcode_attributes );
+	if ( $service_id ) {
+		$shortcode = sprintf( '[ameliastepbooking %s service=%d]', $shortcode_attributes, $service_id );
+	} elseif ( $category_id ) {
+		$shortcode = sprintf( '[ameliastepbooking %s category=%d]', $shortcode_attributes, $category_id );
+	} else {
+		$shortcode = sprintf( '[ameliastepbooking %s]', $shortcode_attributes );
+	}
 
 	$trigger = '<button id="ch-amelia-native-trigger" type="button" hidden tabindex="-1" aria-hidden="true" style="pointer-events:none"></button>';
 	$markup  = '<div id="ch-amelia-native-host">' . $trigger . do_shortcode( $shortcode ) . '</div>';
