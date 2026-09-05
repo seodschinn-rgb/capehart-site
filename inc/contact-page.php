@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function capehart_custom_contact_page_data() {
 	return array(
-		'title' => 'Contact Capehart Heating & Cooling | Call or Book Online',
-		'meta'  => 'Call Capehart Heating & Cooling at (918) 771-1218 or book AC, heating or dryer vent service online. Kiefer-based, serving Greater Tulsa homeowners.',
+		'title' => 'Contact Capehart Heating & Cooling | Call, Email or Book',
+		'meta'  => 'Call (918) 771-1218, email info@capeharthc.com or book service online. Capehart Heating & Cooling is based in Kiefer and serves Greater Tulsa homeowners.',
 		'h1'    => 'Contact Capehart Heating & Cooling',
 	);
 }
@@ -32,6 +32,10 @@ function capehart_custom_contact_faqs() {
 		array(
 			'question' => 'Can I call instead of booking online?',
 			'answer'   => 'Yes. Call Capehart at (918) 771-1218 and describe the property and service need. You can also use the Book online buttons to start the booking form.',
+		),
+		array(
+			'question' => 'Can I contact Capehart by email?',
+			'answer'   => 'Yes. Email info@capeharthc.com with your property address, contact number and a short description of the service you need. You can also call (918) 771-1218 or use online booking.',
 		),
 		array(
 			'question' => 'How does Capehart online booking work?',
@@ -66,6 +70,7 @@ function capehart_custom_contact_icon( $icon ) {
 	$icons = array(
 		'calendar' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3v3M17 3v3M4.5 9.5h15M6.5 5h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="m9 15 2 2 4-5"/></svg>',
 		'phone'    => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.2 4.2 10 8.4 7.8 9.8a15.3 15.3 0 0 0 6.4 6.4l1.4-2.2 4.2 1.8v2.7a1.5 1.5 0 0 1-1.5 1.5A14.3 14.3 0 0 1 4 5.7a1.5 1.5 0 0 1 1.5-1.5h2.7Z"/></svg>',
+		'email'    => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
 		'location' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>',
 		'home'     => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 11 9-8 9 8"/><path d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6"/></svg>',
 		'message'  => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M8 9h8M8 13h5"/></svg>',
@@ -99,6 +104,7 @@ function capehart_custom_render_contact_actions( $booking_label = 'Book online' 
 			<span class="ch-contact-page-action__arrow"><?php echo capehart_custom_contact_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG. ?></span>
 		</a>
 	</div>
+	<p class="ch-contact-page-email-short">Prefer email? <a href="mailto:info@capeharthc.com">info@capeharthc.com</a></p>
 	<?php
 }
 
@@ -115,7 +121,7 @@ function capehart_custom_render_contact_page() {
 				<div class="ch-contact-page-hero__copy">
 					<p class="ch-contact-page-kicker">Kiefer-based · Serving Greater Tulsa</p>
 					<h1 id="contact-page-title"><?php echo esc_html( $data['h1'] ); ?></h1>
-					<p class="ch-contact-page-hero__lead">Tell Capehart what is happening at your home and where the property is located. Call the team to describe the request, or open online booking to choose a service category and follow the form.</p>
+					<p class="ch-contact-page-hero__lead">Tell Capehart what is happening at your home and where the property is located. Call or email the team to describe the request, or open online booking to choose a service category and follow the form.</p>
 					<?php capehart_custom_render_contact_actions(); ?>
 				</div>
 				<div class="ch-contact-page-hero__visual">
@@ -143,8 +149,8 @@ function capehart_custom_render_contact_page() {
 		<section id="contact-options" class="ch-contact-page-section ch-contact-page-options" aria-labelledby="contact-options-title">
 			<div class="ch-contact-page-shell">
 				<div class="ch-contact-page-heading ch-contact-page-heading--split">
-					<div><p class="ch-contact-page-kicker">Two direct ways to start</p><h2 id="contact-options-title">Choose the contact path that works for you</h2></div>
-					<p>Online booking lets you choose a published service category. Calling is useful when you want to describe the situation before selecting a category.</p>
+					<div><p class="ch-contact-page-kicker">Call, email or book online</p><h2 id="contact-options-title">Choose the contact path that works for you</h2></div>
+					<p>Book online to choose a service category, call to describe the situation, or send the details by email.</p>
 				</div>
 				<div class="ch-contact-page-options__grid">
 					<article class="ch-contact-page-option ch-contact-page-option--booking">
@@ -164,6 +170,11 @@ function capehart_custom_render_contact_page() {
 						<a class="ch-contact-page-option__link" href="tel:+19187711218">(918) 771-1218 <span><?php echo capehart_custom_contact_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG. ?></span></a>
 					</article>
 				</div>
+				<article class="ch-contact-page-email" aria-labelledby="contact-email-title">
+					<span class="ch-contact-page-option__icon"><?php echo capehart_custom_contact_icon( 'email' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG. ?></span>
+					<div><h3 id="contact-email-title">Email Capehart</h3><p>Include your property address, phone number and a short description of what you need.</p></div>
+					<a href="mailto:info@capeharthc.com">info@capeharthc.com</a>
+				</article>
 				<p class="ch-contact-page-options__note">Not sure where to start? <a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Browse the complete service directory</a>.</p>
 			</div>
 		</section>
@@ -222,7 +233,7 @@ function capehart_custom_render_contact_page() {
 			<div class="ch-contact-page-shell ch-contact-page-faq__grid">
 				<div class="ch-contact-page-heading">
 					<p class="ch-contact-page-kicker">Contact questions</p>
-					<h2 id="contact-faq-title">Before you call or book online</h2>
+					<h2 id="contact-faq-title">Before you call, email or book online</h2>
 					<p>These answers cover the practical details people most often need before contacting Capehart.</p>
 				</div>
 				<div class="ch-contact-page-faq__items">
@@ -238,8 +249,8 @@ function capehart_custom_render_contact_page() {
 
 		<section class="ch-contact-page-final" aria-labelledby="contact-final-title">
 			<div class="ch-contact-page-shell ch-contact-page-final__grid">
-				<div><p class="ch-contact-page-kicker">Choose how to get started</p><h2 id="contact-final-title">Share the address and what is happening</h2><p>Open online booking or call Capehart at (918) 771-1218. If you are unsure which category fits, begin with the system or vent involved and the change you noticed.</p></div>
-				<?php capehart_custom_render_contact_actions( 'Open online booking' ); ?>
+				<div><p class="ch-contact-page-kicker">Choose how to get started</p><h2 id="contact-final-title">Share the address and what is happening</h2><p>Book online, call Capehart at (918) 771-1218 or send an email. If you are unsure which category fits, begin with the system or vent involved and the change you noticed.</p></div>
+				<div><?php capehart_custom_render_contact_actions( 'Open online booking' ); ?></div>
 			</div>
 		</section>
 	</div>
@@ -423,6 +434,7 @@ function capehart_custom_contact_organization_schema( $data ) {
 	$data['@type']      = 'HVACBusiness';
 	$data['name']       = 'Capehart Heating & Cooling';
 	$data['telephone']  = '+1-918-771-1218';
+	$data['email']      = 'info@capeharthc.com';
 	$data['address']    = array(
 		'@type'           => 'PostalAddress',
 		'addressLocality' => 'Kiefer',
@@ -437,6 +449,7 @@ function capehart_custom_contact_organization_schema( $data ) {
 		'@type'       => 'ContactPoint',
 		'telephone'   => '+1-918-771-1218',
 		'contactType' => 'service scheduling',
+		'email'       => 'info@capeharthc.com',
 		'areaServed'  => array(
 			'@type' => 'Place',
 			'name'  => 'Greater Tulsa, Oklahoma',
@@ -542,6 +555,7 @@ function capehart_custom_contact_schema_fallback() {
 				'name'         => 'Capehart Heating & Cooling',
 				'url'          => trailingslashit( home_url( '/' ) ),
 				'telephone'    => '+1-918-771-1218',
+				'email'        => 'info@capeharthc.com',
 				'address'      => array(
 					'@type'           => 'PostalAddress',
 					'addressLocality' => 'Kiefer',
@@ -553,6 +567,7 @@ function capehart_custom_contact_schema_fallback() {
 					'@type'       => 'ContactPoint',
 					'telephone'   => '+1-918-771-1218',
 					'contactType' => 'service scheduling',
+					'email'       => 'info@capeharthc.com',
 					'areaServed'  => $area,
 				),
 			),

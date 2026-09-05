@@ -284,6 +284,7 @@
 
 .ch-contact-page-action svg,
 .ch-contact-page-option svg,
+.ch-contact-page-email svg,
 .ch-contact-page-request svg,
 .ch-contact-page-services svg,
 .ch-contact-page-area svg,
@@ -626,6 +627,76 @@
   color: var(--ch-contact-blue-dark);
   font-weight: 800;
   text-underline-offset: 3px;
+}
+
+.ch-contact-page-email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  color: var(--ch-contact-ink);
+  background: var(--ch-contact-blue-soft);
+  border: 1px solid var(--ch-contact-line);
+  border-radius: 22px;
+}
+
+.ch-contact-page-email > .ch-contact-page-option__icon {
+  flex: 0 0 58px;
+}
+
+.ch-contact-page-email > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.ch-contact-page-email h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.ch-contact-page-email p {
+  margin: 0;
+  color: var(--ch-contact-muted);
+  line-height: 1.65;
+}
+
+.ch-contact-page-email > a {
+  max-width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--ch-contact-ink);
+  font-size: 1rem;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.ch-contact-page-email > a:hover {
+  color: #fff;
+  background: var(--ch-contact-blue-dark);
+  text-decoration: underline;
+}
+
+.ch-contact-page .ch-contact-page-email-short {
+  margin: 1rem 0 0;
+  color: #d3e5ed;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.ch-contact-page-email-short a {
+  color: #fff;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ch-contact-page-email-short a:hover {
+  color: #94dbff;
 }
 
 /* Request details */

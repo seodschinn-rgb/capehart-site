@@ -1640,6 +1640,22 @@ a.ch-booking-trigger {
   text-decoration: none;
 }
 
+.ch-contact .ch-contact-email a,
+.ch-site-footer .ch-contact-email a {
+  display: inline-block;
+  max-width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-underline-offset: 4px;
+}
+
+.ch-contact .ch-contact-email a:hover,
+.ch-site-footer .ch-contact-email a:hover {
+  color: #94dbff;
+}
+
 .ch-contact-card {
   padding: clamp(1.4rem, 3vw, 2rem);
   color: var(--ch-ink);

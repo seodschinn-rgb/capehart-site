@@ -26,6 +26,10 @@
 
 <!-- wp:paragraph {"className":"ch-contact__phone"} -->
 <p class="ch-contact__phone"><a href="tel:+19187711218"><?php esc_html_e( '(918) 771-1218', 'capehart-custom' ); ?></a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"ch-contact-email"} -->
+<p class="ch-contact-email"><a href="mailto:info@capeharthc.com">info@capeharthc.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column -->
 
